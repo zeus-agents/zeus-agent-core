@@ -5,34 +5,37 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 
-@Builder
 @Slf4j
 public class CyclicInputBehaviourOpenAI extends CyclicBehaviour {
 
-    Agent inputAgent;
-
     String middelAgentName;
+
+    @Builder
+    public CyclicInputBehaviourOpenAI(Agent inputAgent, String middelAgentName) {
+        super(inputAgent);
+        this.middelAgentName = middelAgentName;
+    }
 
     @Override
     public void action() {
         System.out.println("[Input OpenAPI Agent] Behavior executing");
 
-        ACLMessage inputMsg = (ACLMessage) inputAgent.getO2AObject();
+        ACLMessage inputMsg = (ACLMessage) myAgent.getO2AObject();
 
         if (inputMsg != null) {
-            ACLMessage middleMsg = new ACLMessage(ACLMessage.REQUEST);
-            middleMsg.setSender(this.inputAgent.getAID());
-            middleMsg.addReceiver(new AID(this.middelAgentName, AID.ISLOCALNAME));
-            middleMsg.setContent(inputMsg.getContent());
-            System.out.println("[Input OpenAPI Agent] Send message to: " + middelAgentName);
-            this.inputAgent.send(middleMsg);
+            inputMsg.setSender(this.myAgent.getAID());
+            inputMsg.clearAllReceiver();
+            inputMsg.addReceiver(new AID(this.middelAgentName, AID.ISLOCALNAME));
+            inputMsg.setContent(inputMsg.getContent());
+            this.myAgent.send(inputMsg);
 
         } else {
             System.out.println("[Input OpenAPI Agent] No message received, blocking");
-            block();
         }
+        block();
     }
 }

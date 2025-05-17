@@ -26,7 +26,7 @@ public class Main {
                     "org.zeusagents.agents.middle.MiddleOpenAIAgent", null);
             middleOpenAIAgent.start();
 
-            InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder().middleAgents(List.of(middleOpenAIAgent.getName())).build();
+            InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder().middleAgents(List.of("middleOpenAIAgent")).build();
             Object[] objects = new Object[1];
             objects[0] = inputOpenAIConfig;
 
@@ -34,9 +34,15 @@ public class Main {
                     "org.zeusagents.agents.input.InputOpenAIAgent", objects);
             inputOpenAIAgent.start();
 
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             sendMessage( inputOpenAIAgent, "CONFIG", "mode=production;timeout=5000");
             sendMessage( inputOpenAIAgent, "DATA", "{sensor:temp,value:23.5}");
+            sendMessage( inputOpenAIAgent, "DATA", "{sensor:temp,value:23.5}");
+            sendMessage( inputOpenAIAgent, "DATA", "{sensor:temp,value:23.5}");
+
+            Thread.sleep(1000); //we need time to process more data cause the agent queue is full
+            sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");
+            sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");
             sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");
 
         } catch (StaleProxyException e) {
@@ -58,7 +64,7 @@ public class Main {
             System.out.println("[Main] Sending message - To: "+inputOpenAIAgent.getName()+", Type: " + type +
                     ", Content: " + content);
 
-            inputOpenAIAgent.putO2AObject(msg, false); // false means asynchronous
+            inputOpenAIAgent.putO2AObject(msg, true); // false means asynchronous
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -20,7 +20,7 @@ public class InputOpenAIAgent extends Agent {
         }
 
         //This accept data external from the JDE system
-        setEnabledO2ACommunication(true, 3);
+        setEnabledO2ACommunication(true, 0);
 
         addBehaviour(CyclicInputBehaviourOpenAI.builder().inputAgent(this).middelAgentName(inputOpenAIConfig.getMiddleAgents().get(0)).build());
         System.out.println("[Input OpenAPI Agent] SETUP COMPLETE");
