@@ -9,6 +9,9 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
+import org.zeusagents.agents.input.config.InputOpenAIConfig;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,13 +22,22 @@ public class Main {
         AgentContainer mainContainer = rt.createMainContainer(profile);
 
         try {
-            AgentController openAIAgent = mainContainer.createNewAgent("openAIAgent", "org.zeusagents.agents.InputOpenAIAgent", null);
-            openAIAgent.start();
+            AgentController middleOpenAIAgent = mainContainer.createNewAgent("middleOpenAIAgent",
+                    "org.zeusagents.agents.middle.MiddleOpenAIAgent", null);
+            middleOpenAIAgent.start();
 
-            Thread.sleep(1000);
-            sendMessage( openAIAgent, "CONFIG", "mode=production;timeout=5000");
-            sendMessage( openAIAgent, "DATA", "{sensor:temp,value:23.5}");
-            sendMessage( openAIAgent, "COMMAND", "shutdown");
+            InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder().middleAgents(List.of(middleOpenAIAgent.getName())).build();
+            Object[] objects = new Object[1];
+            objects[0] = inputOpenAIConfig;
+
+            AgentController inputOpenAIAgent = mainContainer.createNewAgent("inputOpenAIAgent",
+                    "org.zeusagents.agents.input.InputOpenAIAgent", objects);
+            inputOpenAIAgent.start();
+
+            Thread.sleep(5000);
+            sendMessage( inputOpenAIAgent, "CONFIG", "mode=production;timeout=5000");
+            sendMessage( inputOpenAIAgent, "DATA", "{sensor:temp,value:23.5}");
+            sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");
 
         } catch (StaleProxyException e) {
             throw new RuntimeException(e);
@@ -35,18 +47,18 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
-    private static void sendMessage(AgentController openAIAgent, String type, String content) {
+    private static void sendMessage(AgentController inputOpenAIAgent, String type, String content) {
         try {
-            ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-            msg.addReceiver(new AID(openAIAgent.getName(), AID.ISLOCALNAME));
+            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+            msg.addReceiver(new AID(inputOpenAIAgent.getName(), AID.ISLOCALNAME));
             msg.setLanguage("English");
             msg.setOntology(type);  // Using ontology as message type
             msg.setContent(content);
 
-            System.out.println("[Main] Sending message - Type: " + type +
+            System.out.println("[Main] Sending message - To: "+inputOpenAIAgent.getName()+", Type: " + type +
                     ", Content: " + content);
 
-            openAIAgent.putO2AObject(msg, false); // false means asynchronous
+            inputOpenAIAgent.putO2AObject(msg, false); // false means asynchronous
         } catch (Exception e) {
             e.printStackTrace();
         }
