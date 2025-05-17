@@ -1,17 +1,55 @@
 package org.zeusagents;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import jade.core.AID;
+import jade.core.Profile;
+import jade.core.ProfileImpl;
+import jade.core.Runtime;
+import jade.lang.acl.ACLMessage;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
+import jade.wrapper.ControllerException;
+import jade.wrapper.StaleProxyException;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        Runtime rt = Runtime.instance();
+        Profile profile = new ProfileImpl();
+        profile.setParameter(Profile.GUI, "true");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        AgentContainer mainContainer = rt.createMainContainer(profile);
+
+        try {
+            AgentController openAIAgent = mainContainer.createNewAgent("openAIAgent", "org.zeusagents.agents.InputOpenAIAgent", null);
+            openAIAgent.start();
+
+            Thread.sleep(1000);
+            sendMessage( openAIAgent, "CONFIG", "mode=production;timeout=5000");
+            sendMessage( openAIAgent, "DATA", "{sensor:temp,value:23.5}");
+            sendMessage( openAIAgent, "COMMAND", "shutdown");
+
+        } catch (StaleProxyException e) {
+            throw new RuntimeException(e);
+        } catch (ControllerException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
+    private static void sendMessage(AgentController openAIAgent, String type, String content) {
+        try {
+            ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+            msg.addReceiver(new AID(openAIAgent.getName(), AID.ISLOCALNAME));
+            msg.setLanguage("English");
+            msg.setOntology(type);  // Using ontology as message type
+            msg.setContent(content);
+
+            System.out.println("[Main] Sending message - Type: " + type +
+                    ", Content: " + content);
+
+            openAIAgent.putO2AObject(msg, false); // false means asynchronous
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
