@@ -9,11 +9,15 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
+import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.InputOpenAIConfig;
+import org.zeusagents.agents.middle.config.MiddleBehaviourType;
+import org.zeusagents.agents.middle.config.MiddleOpenAIConfig;
+import org.zeusagents.openai.OpenAITextGeneratorClient;
 
 import java.util.List;
 
-public class Main {
+public class CyclicMain {
     public static void main(String[] args) {
         Runtime rt = Runtime.instance();
         Profile profile = new ProfileImpl();
@@ -22,16 +26,27 @@ public class Main {
         AgentContainer mainContainer = rt.createMainContainer(profile);
 
         try {
+            MiddleOpenAIConfig middleOpenAIConfig = MiddleOpenAIConfig.builder()
+                    .openAIClient(new OpenAITextGeneratorClient())
+                    .middleBehaviourType(MiddleBehaviourType.CYCLIC_MIDDLE_BEHAVIOUR_OPENAI)
+                    .build();
+            Object[] middleObjects = new Object[1];
+            middleObjects[0] = middleOpenAIConfig;
+
             AgentController middleOpenAIAgent = mainContainer.createNewAgent("middleOpenAIAgent",
-                    "org.zeusagents.agents.middle.MiddleOpenAIAgent", null);
+                    "org.zeusagents.agents.middle.MiddleOpenAIAgent", middleObjects);
             middleOpenAIAgent.start();
 
-            InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder().middleAgents(List.of("middleOpenAIAgent")).build();
-            Object[] objects = new Object[1];
-            objects[0] = inputOpenAIConfig;
+            InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder()
+                    .middleAgents(List.of("middleOpenAIAgent"))
+                    .inputBehaviourTypes(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)
+                    .build();
+
+            Object[] inputObjects = new Object[1];
+            inputObjects[0] = inputOpenAIConfig;
 
             AgentController inputOpenAIAgent = mainContainer.createNewAgent("inputOpenAIAgent",
-                    "org.zeusagents.agents.input.InputOpenAIAgent", objects);
+                    "org.zeusagents.agents.input.InputOpenAIAgent", inputObjects);
             inputOpenAIAgent.start();
 
             Thread.sleep(10000);
@@ -40,7 +55,7 @@ public class Main {
             sendMessage( inputOpenAIAgent, "DATA", "{sensor:temp,value:23.5}");
             sendMessage( inputOpenAIAgent, "DATA", "{sensor:temp,value:23.5}");
 
-            Thread.sleep(1000); //we need time to process more data cause the agent queue is full
+            Thread.sleep(2000); //we need time to process more data cause the agent queue is full
             sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");
             sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");
             sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");

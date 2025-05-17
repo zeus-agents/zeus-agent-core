@@ -1,25 +1,22 @@
-package org.zeusagents.agents.middle.behaviours.cyclic;
+package org.zeusagents.agents.middle.behaviours.simple;
 
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import lombok.Builder;
-import lombok.extern.slf4j.Slf4j;
 import org.zeusagents.openai.OpenAIClient;
 
+public class SimpleMiddleBehaviourOpenAI extends SimpleBehaviour {
 
-@Slf4j
-public class CyclicMiddleBehaviourOpenAI extends CyclicBehaviour {
-
+    private int receivedCount = 0;
     private OpenAIClient openAIClient;
 
     @Builder
-    public CyclicMiddleBehaviourOpenAI(Agent agent, OpenAIClient openAIClient) {
+    public SimpleMiddleBehaviourOpenAI(Agent agent, OpenAIClient openAIClient) {
         super(agent);
         this.openAIClient = openAIClient;
     }
-
 
     @Override
     public void action() {
@@ -35,9 +32,19 @@ public class CyclicMiddleBehaviourOpenAI extends CyclicBehaviour {
             System.out.println("Content: " + msg.getContent());
             System.out.println("Performative: " + ACLMessage.getPerformative(msg.getPerformative()));
             System.out.println("=======================");
+            receivedCount++;
         } else {
             System.out.println("[Middle OpenAPI Agent] No message received, blocking");
+            block();
         }
-        block();
+    }
+
+    @Override
+    public boolean done() {
+        if (receivedCount >= 1) {
+            System.out.println(myAgent.getLocalName() + " finished processing");
+            return true;
+        }
+        return false;
     }
 }
