@@ -4,6 +4,7 @@ import jade.core.Agent;
 import org.zeusagents.agents.input.behaviours.simple.SimpleInputBehaviourOpenAI;
 import org.zeusagents.agents.middle.behaviours.cyclic.CyclicMiddleBehaviourOpenAI;
 import org.zeusagents.agents.middle.behaviours.simple.SimpleMiddleBehaviourOpenAI;
+import org.zeusagents.agents.middle.behaviours.tick.TickMiddleBehaviourOpenAI;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
 import org.zeusagents.agents.middle.config.MiddleOpenAIConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
@@ -33,6 +34,10 @@ public class MiddleOpenAIAgent extends Agent {
 
         if(middleOpenAIConfig.getMiddleBehaviourType().equals(MiddleBehaviourType.SIMPLE_MIDDLE_BEHAVIOUR_OPENAI)){
             addBehaviour(SimpleMiddleBehaviourOpenAI.builder().agent(this).openAIClient(middleOpenAIConfig.getOpenAIClient()).build());
+        }
+
+        if(middleOpenAIConfig.getMiddleBehaviourType().equals(MiddleBehaviourType.TICK_MIDDLE_BEHAVIOUR_OPENAI)){
+            addBehaviour(TickMiddleBehaviourOpenAI.builder().agent(this).openAIClient(middleOpenAIConfig.getOpenAIClient()).build());
         }
     }
 }

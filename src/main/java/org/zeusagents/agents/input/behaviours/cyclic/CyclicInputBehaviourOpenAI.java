@@ -13,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
 
-@Slf4j
 public class CyclicInputBehaviourOpenAI extends CyclicBehaviour {
 
     private String middelAgentName;
