@@ -11,11 +11,14 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.InputOpenAIConfig;
+import org.zeusagents.agents.input.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
 import org.zeusagents.agents.middle.config.MiddleOpenAIConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.Map;
 
 public class CyclicMain {
     public static void main(String[] args) {
@@ -26,20 +29,15 @@ public class CyclicMain {
         AgentContainer mainContainer = rt.createMainContainer(profile);
 
         try {
-            MiddleOpenAIConfig middleOpenAIConfig = MiddleOpenAIConfig.builder()
-                    .openAIClient(new OpenAITextGeneratorClient())
-                    .middleBehaviourType(MiddleBehaviourType.CYCLIC_MIDDLE_BEHAVIOUR_OPENAI)
-                    .build();
-            Object[] middleObjects = new Object[1];
-            middleObjects[0] = middleOpenAIConfig;
+            createMiddleAgent(mainContainer, "middleOpenAIAgent1");
+            createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            AgentController middleOpenAIAgent = mainContainer.createNewAgent("middleOpenAIAgent",
-                    "org.zeusagents.agents.middle.MiddleOpenAIAgent", middleObjects);
-            middleOpenAIAgent.start();
+            Map<String, InputBehaviourTypes> middleOpenAIAgent1 =
+                    Map.of("middleOpenAIAgent1", InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI,
+                            "middleOpenAIAgent2", InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI);
 
             InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder()
-                    .middleAgents(List.of("middleOpenAIAgent"))
-                    .inputBehaviourTypes(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)
+                    .behaviourForMiddleAgent(middleOpenAIAgent1)
                     .build();
 
             Object[] inputObjects = new Object[1];
@@ -50,15 +48,19 @@ public class CyclicMain {
             inputOpenAIAgent.start();
 
             Thread.sleep(10000);
-            sendMessage( inputOpenAIAgent, "CONFIG", "mode=production;timeout=5000");
-            sendMessage( inputOpenAIAgent, "DATA", "{sensor:temp,value:23.5}");
-            sendMessage( inputOpenAIAgent, "DATA", "{sensor:temp,value:23.5}");
-            sendMessage( inputOpenAIAgent, "DATA", "{sensor:temp,value:23.5}");
+            sendMessage( inputOpenAIAgent, "middleOpenAIAgent1","CONFIG", "mode=production;timeout=5000");
 
-            Thread.sleep(2000); //we need time to process more data cause the agent queue is full
-            sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");
-            sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");
-            sendMessage( inputOpenAIAgent, "COMMAND", "shutdown");
+            Thread.sleep(1000);
+            sendMessage( inputOpenAIAgent,"middleOpenAIAgent1", "DATA", "{sensor:temp,value:23.5}");
+
+            Thread.sleep(1000);
+            sendMessage( inputOpenAIAgent,"middleOpenAIAgent2", "DATA", "{sensor:temp,value:23.5}");
+
+            Thread.sleep(1000);
+            sendMessage( inputOpenAIAgent,"middleOpenAIAgent1", "COMMAND", "shutdown");
+
+            Thread.sleep(1000);
+            sendMessage( inputOpenAIAgent,"middleOpenAIAgent2", "COMMAND", "shutdown");
 
         } catch (StaleProxyException e) {
             throw new RuntimeException(e);
@@ -68,13 +70,38 @@ public class CyclicMain {
             throw new RuntimeException(e);
         }
     }
-    private static void sendMessage(AgentController inputOpenAIAgent, String type, String content) {
+
+    private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
+        MiddleOpenAIConfig middleOpenAIConfig = MiddleOpenAIConfig.builder()
+                .openAIClient(new OpenAITextGeneratorClient())
+                .middleBehaviourType(MiddleBehaviourType.CYCLIC_MIDDLE_BEHAVIOUR_OPENAI)
+                .build();
+
+        Object[] middleObjects = new Object[1];
+        middleObjects[0] = middleOpenAIConfig;
+
+        AgentController middleOpenAIAgent = mainContainer.createNewAgent(nameAgent,
+                "org.zeusagents.agents.middle.MiddleOpenAIAgent", middleObjects);
+        middleOpenAIAgent.start();
+
+    }
+
+    private static void sendMessage(AgentController inputOpenAIAgent, String middleAgentReceiver, String type, String content) {
         try {
             ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
             msg.addReceiver(new AID(inputOpenAIAgent.getName(), AID.ISLOCALNAME));
+            msg.setEncoding("Base64");
             msg.setLanguage("English");
             msg.setOntology(type);  // Using ontology as message type
-            msg.setContent(content);
+
+            BasicMessageInputAgent msgContent =
+                    BasicMessageInputAgent.builder().middleAgentReceiver(middleAgentReceiver).content(content).build();
+
+            try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                 ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+                oos.writeObject(msgContent);
+                msg.setByteSequenceContent(bos.toByteArray());
+            }
 
             System.out.println("[Main] Sending message - To: "+inputOpenAIAgent.getName()+", Type: " + type +
                     ", Content: " + content);

@@ -7,6 +7,8 @@ import org.zeusagents.agents.input.behaviours.simple.SimpleInputBehaviourOpenAI;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.InputOpenAIConfig;
 
+import java.util.Map;
+
 @Slf4j
 public class InputOpenAIAgent extends Agent {
     private InputOpenAIConfig inputOpenAIConfig;
@@ -17,9 +19,8 @@ public class InputOpenAIAgent extends Agent {
 
         if(null != args){
             inputOpenAIConfig = (InputOpenAIConfig) args[0];
-
             //This accept data external from the JDE system
-            setEnabledO2ACommunication(true, 0);
+            setEnabledO2ACommunication(true, 10);
 
             activateBehaviours();
             System.out.println("[Input OpenAPI Agent] SETUP COMPLETE");
@@ -31,12 +32,15 @@ public class InputOpenAIAgent extends Agent {
     }
 
     private void activateBehaviours(){
-        if(inputOpenAIConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)){
-            addBehaviour(CyclicInputBehaviourOpenAI.builder().inputAgent(this).middelAgentName(inputOpenAIConfig.getMiddleAgents().get(0)).build());
+        for(Map.Entry<String, InputBehaviourTypes> entry : inputOpenAIConfig.getBehaviourForMiddleAgent().entrySet()){
+            if(entry.getValue().equals(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)){
+                addBehaviour(CyclicInputBehaviourOpenAI.builder().inputAgent(this).middelAgentName(entry.getKey()).build());
+            }
+
+            if(entry.getValue().equals(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)){
+                addBehaviour(SimpleInputBehaviourOpenAI.builder().inputAgent(this).middelAgentName(entry.getKey()).build());
+            }
         }
 
-        if(inputOpenAIConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)){
-            addBehaviour(SimpleInputBehaviourOpenAI.builder().inputAgent(this).middelAgentName(inputOpenAIConfig.getMiddleAgents().get(0)).build());
-        }
     }
 }
