@@ -12,44 +12,45 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
 public class TickSenderInputBehaviourOpenAI extends TickerBehaviour {
-    private String middelAgentName;
 
     @Builder
-    public TickSenderInputBehaviourOpenAI(Agent inputAgent, String middelAgentName) {
+    public TickSenderInputBehaviourOpenAI(Agent inputAgent) {
         super(inputAgent,1000);
-        this.middelAgentName = middelAgentName;
     }
 
     @Override
     protected void onTick() {
         InputOpenAIAgent myInputAgent = (InputOpenAIAgent) myAgent;
 
-        if (!myInputAgent.getCustomMessagecache().get(this.middelAgentName).isEmpty()) {
+        if (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             System.out.println("[Input OpenAPI Agent] Queued message: ");
-            myInputAgent.getCustomMessagecache().get(this.middelAgentName).forEach(m -> System.out.println(m.getOntology()));
-            ACLMessage inputMsg = myInputAgent.getCustomMessagecache().get(this.middelAgentName).poll();
+            myInputAgent.getMessageCacheQueue().forEach(m -> System.out.println(m.getOntology()));
 
-            if(inputMsg != null && shouldSendMsg(inputMsg)){
-                System.out.println("[Input OpenAPI Agent] Rework message: " + inputMsg.getOntology() + ", To: " + this.middelAgentName);
+            ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
+
+            String receiverAgent = getReceiverAgent(inputMsg);
+
+            if (inputMsg != null && receiverAgent != null) {
+                System.out.println("[Input OpenAPI Agent] Rework message: " + inputMsg.getOntology() + ", To: " + receiverAgent);
                 inputMsg.setSender(this.myAgent.getAID());
                 inputMsg.clearAllReceiver();
-                inputMsg.addReceiver(new AID(this.middelAgentName, AID.ISLOCALNAME));
+                inputMsg.addReceiver(new AID(receiverAgent, AID.ISLOCALNAME));
                 this.myAgent.send(inputMsg);
-                System.out.println("[Input OpenAPI Agent] Send message: " + inputMsg.getOntology() + ", To: " + this.middelAgentName);
+                System.out.println("[Input OpenAPI Agent] Send message: " + inputMsg.getOntology() + ", To: " + receiverAgent);
             }
         }
     }
 
-    private boolean shouldSendMsg(ACLMessage inputMsg){
+    private String getReceiverAgent(ACLMessage inputMsg){
         try (ObjectInputStream ois =
                      new ObjectInputStream(new ByteArrayInputStream(inputMsg.getByteSequenceContent()))) {
             BasicMessageInputAgent data = (BasicMessageInputAgent) ois.readObject();
             System.out.println("[Input OpenAPI Agent] Received: " + data.getMiddleAgentReceiver() +
-                    ", Content: " + data.getContent() +", Ontology: "+ inputMsg.getOntology());
-            return this.middelAgentName.equals(data.getMiddleAgentReceiver());
+                    " Content: " + data.getContent());
+            return data.getMiddleAgentReceiver();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 }

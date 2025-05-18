@@ -32,12 +32,8 @@ public class TickMain {
             createMiddleAgent(mainContainer, "middleOpenAIAgent1");
             createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            Map<String, InputBehaviourTypes> middleOpenAIAgent1 =
-                    Map.of("middleOpenAIAgent1", InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI,
-                            "middleOpenAIAgent2", InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI);
-
             InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder()
-                    .behaviourForMiddleAgent(middleOpenAIAgent1)
+                    .inputBehaviourTypes(InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI)
                     .build();
 
             Object[] inputObjects = new Object[1];

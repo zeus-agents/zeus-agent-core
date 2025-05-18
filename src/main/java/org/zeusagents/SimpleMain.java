@@ -17,8 +17,6 @@ import org.zeusagents.openai.OpenAITextGeneratorClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
-import java.util.Map;
 
 public class SimpleMain {
     public static void main(String[] args) {
@@ -31,12 +29,8 @@ public class SimpleMain {
             createMiddleAgent(mainContainer, "middleOpenAIAgent1");
             createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            Map<String, InputBehaviourTypes> middleOpenAIAgent1 =
-                    Map.of("middleOpenAIAgent1", InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI,
-                            "middleOpenAIAgent2", InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI);
-
             InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder()
-                    .behaviourForMiddleAgent(middleOpenAIAgent1)
+                    .inputBehaviourTypes(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)
                     .build();
 
             Object[] inputObjects = new Object[1];
@@ -49,13 +43,14 @@ public class SimpleMain {
 
 
             Thread.sleep(10000);
-            sendMessage( inputOpenAIAgent, "middleOpenAIAgent1","CONFIG", "mode=production;timeout=5000");
-            sendMessage( inputOpenAIAgent, "middleOpenAIAgent2","CONFIG", "mode=production;timeout=5000");
+            sendMessage(inputOpenAIAgent, "middleOpenAIAgent1", "CONFIG", "mode=production;timeout=5000");
+            sendMessage(inputOpenAIAgent, "middleOpenAIAgent2", "CONFIG", "mode=production;timeout=5000");
 
         } catch (StaleProxyException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
+
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
         MiddleOpenAIConfig middleOpenAIConfig = MiddleOpenAIConfig.builder()
                 .openAIClient(new OpenAITextGeneratorClient())
@@ -88,7 +83,7 @@ public class SimpleMain {
                 msg.setByteSequenceContent(bos.toByteArray());
             }
 
-            System.out.println("[Main] Sending message - To: "+inputOpenAIAgent.getName()+", Type: " + type +
+            System.out.println("[Main] Sending message - To: " + inputOpenAIAgent.getName() + ", Type: " + type +
                     ", Content: " + content);
 
             inputOpenAIAgent.putO2AObject(msg, true); // false means asynchronous

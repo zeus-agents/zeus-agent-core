@@ -32,12 +32,8 @@ public class CyclicMain {
             createMiddleAgent(mainContainer, "middleOpenAIAgent1");
             createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            Map<String, InputBehaviourTypes> middleOpenAIAgent1 =
-                    Map.of("middleOpenAIAgent1", InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI,
-                            "middleOpenAIAgent2", InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI);
-
             InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder()
-                    .behaviourForMiddleAgent(middleOpenAIAgent1)
+                    .inputBehaviourTypes(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)
                     .build();
 
             Object[] inputObjects = new Object[1];
@@ -49,17 +45,11 @@ public class CyclicMain {
 
             Thread.sleep(10000);
             sendMessage( inputOpenAIAgent, "middleOpenAIAgent1","CONFIG", "mode=production;timeout=5000");
-
-            Thread.sleep(1000);
             sendMessage( inputOpenAIAgent,"middleOpenAIAgent1", "DATA", "{sensor:temp,value:23.5}");
 
-            Thread.sleep(1000);
             sendMessage( inputOpenAIAgent,"middleOpenAIAgent2", "DATA", "{sensor:temp,value:23.5}");
 
-            Thread.sleep(1000);
             sendMessage( inputOpenAIAgent,"middleOpenAIAgent1", "COMMAND", "shutdown");
-
-            Thread.sleep(1000);
             sendMessage( inputOpenAIAgent,"middleOpenAIAgent2", "COMMAND", "shutdown");
 
         } catch (StaleProxyException e) {

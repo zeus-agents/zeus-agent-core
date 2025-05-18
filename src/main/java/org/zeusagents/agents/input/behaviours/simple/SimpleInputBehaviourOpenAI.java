@@ -12,13 +12,11 @@ import java.io.ObjectInputStream;
 
 public class SimpleInputBehaviourOpenAI extends SimpleBehaviour {
 
-    private String middelAgentName;
     private int receivedCount = 0;
 
     @Builder
-    public SimpleInputBehaviourOpenAI(Agent inputAgent, String middelAgentName) {
+    public SimpleInputBehaviourOpenAI(Agent inputAgent) {
         super(inputAgent);
-        this.middelAgentName = middelAgentName;
     }
 
     @Override
@@ -27,10 +25,12 @@ public class SimpleInputBehaviourOpenAI extends SimpleBehaviour {
 
         ACLMessage inputMsg = (ACLMessage) myAgent.getO2AObject();
 
-        if (inputMsg != null && shouldSendMsg(inputMsg)) {
+        String receiverAgent = getReceiverAgent(inputMsg);
+
+        if (inputMsg != null && receiverAgent != null) {
             inputMsg.setSender(this.myAgent.getAID());
             inputMsg.clearAllReceiver();
-            inputMsg.addReceiver(new AID(this.middelAgentName, AID.ISLOCALNAME));
+            inputMsg.addReceiver(new AID(receiverAgent, AID.ISLOCALNAME));
             this.myAgent.send(inputMsg);
             receivedCount++;
         } else {
@@ -48,17 +48,18 @@ public class SimpleInputBehaviourOpenAI extends SimpleBehaviour {
         }
         return false;
     }
-    private boolean shouldSendMsg(ACLMessage inputMsg){
+
+    private String getReceiverAgent(ACLMessage inputMsg){
         try (ObjectInputStream ois =
                      new ObjectInputStream(new ByteArrayInputStream(inputMsg.getByteSequenceContent()))) {
             BasicMessageInputAgent data = (BasicMessageInputAgent) ois.readObject();
             System.out.println("[Input OpenAPI Agent] Received: " + data.getMiddleAgentReceiver() +
                     " Content: " + data.getContent());
-            return this.middelAgentName.equals(data.getMiddleAgentReceiver());
+            return data.getMiddleAgentReceiver();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
 }

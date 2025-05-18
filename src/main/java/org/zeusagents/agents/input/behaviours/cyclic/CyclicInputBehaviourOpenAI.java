@@ -15,12 +15,9 @@ import java.io.ObjectInputStream;
 
 public class CyclicInputBehaviourOpenAI extends CyclicBehaviour {
 
-    private String middelAgentName;
-
     @Builder
-    public CyclicInputBehaviourOpenAI(Agent inputAgent, String middelAgentName) {
+    public CyclicInputBehaviourOpenAI(Agent inputAgent) {
         super(inputAgent);
-        this.middelAgentName = middelAgentName;
     }
 
     @Override
@@ -29,10 +26,12 @@ public class CyclicInputBehaviourOpenAI extends CyclicBehaviour {
 
         ACLMessage inputMsg = (ACLMessage) myAgent.getO2AObject();
 
-        if (inputMsg != null && shouldSendMsg(inputMsg)) {
+        String receiverAgent = getReceiverAgent(inputMsg);
+
+        if (inputMsg != null && receiverAgent != null) {
             inputMsg.setSender(this.myAgent.getAID());
             inputMsg.clearAllReceiver();
-            inputMsg.addReceiver(new AID(this.middelAgentName, AID.ISLOCALNAME));
+            inputMsg.addReceiver(new AID(receiverAgent, AID.ISLOCALNAME));
             this.myAgent.send(inputMsg);
         } else {
             System.out.println("[Input OpenAPI Agent] No message received, blocking");
@@ -40,16 +39,16 @@ public class CyclicInputBehaviourOpenAI extends CyclicBehaviour {
         block();
     }
 
-    private boolean shouldSendMsg(ACLMessage inputMsg){
+    private String getReceiverAgent(ACLMessage inputMsg){
         try (ObjectInputStream ois =
                      new ObjectInputStream(new ByteArrayInputStream(inputMsg.getByteSequenceContent()))) {
             BasicMessageInputAgent data = (BasicMessageInputAgent) ois.readObject();
             System.out.println("[Input OpenAPI Agent] Received: " + data.getMiddleAgentReceiver() +
                     " Content: " + data.getContent());
-            return this.middelAgentName.equals(data.getMiddleAgentReceiver());
+            return data.getMiddleAgentReceiver();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 }

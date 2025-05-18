@@ -29,7 +29,7 @@ public class TickReceiverInputBehaviourOpenAI extends TickerBehaviour {
                 BasicMessageInputAgent data = (BasicMessageInputAgent) ois.readObject();
 
                 InputOpenAIAgent myInputAgent = (InputOpenAIAgent) myAgent;
-                myInputAgent.getCustomMessagecache().get(data.getMiddleAgentReceiver()).add(inputMsg);
+                myInputAgent.getMessageCacheQueue().add(inputMsg);
 
                 System.out.println("[Input OpenAPI Agent] Save Ontology: "+inputMsg.getOntology()+", Agent: "+data.getMiddleAgentReceiver());
 

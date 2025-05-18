@@ -11,14 +11,11 @@ import org.zeusagents.agents.input.behaviours.tick.TickSenderInputBehaviourOpenA
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.InputOpenAIConfig;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 @Getter
 public class InputOpenAIAgent extends Agent {
-    private Map<String, Queue<ACLMessage>> customMessagecache = new HashMap<>();
+    Queue<ACLMessage> messageCacheQueue = new LinkedList<>();
     private InputOpenAIConfig inputOpenAIConfig;
 
     protected void setup() {
@@ -40,22 +37,17 @@ public class InputOpenAIAgent extends Agent {
     }
 
     private void activateBehaviours(){
-        for(Map.Entry<String, InputBehaviourTypes> entry : inputOpenAIConfig.getBehaviourForMiddleAgent().entrySet()){
-            customMessagecache.put(entry.getKey(),new LinkedList<>());
-
-            if(entry.getValue().equals(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)){
-                addBehaviour(CyclicInputBehaviourOpenAI.builder().inputAgent(this).middelAgentName(entry.getKey()).build());
-            }
-
-            if(entry.getValue().equals(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)){
-                addBehaviour(SimpleInputBehaviourOpenAI.builder().inputAgent(this).middelAgentName(entry.getKey()).build());
-            }
-
-            if(entry.getValue().equals(InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI)){
-                addBehaviour(TickReceiverInputBehaviourOpenAI.builder().inputAgent(this).build());
-                addBehaviour(TickSenderInputBehaviourOpenAI.builder().inputAgent(this).middelAgentName(entry.getKey()).build());
-            }
+        if(inputOpenAIConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)){
+            addBehaviour(CyclicInputBehaviourOpenAI.builder().inputAgent(this).build());
         }
 
+        if(inputOpenAIConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)){
+            addBehaviour(SimpleInputBehaviourOpenAI.builder().inputAgent(this).build());
+        }
+
+        if(inputOpenAIConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI)){
+            addBehaviour(TickReceiverInputBehaviourOpenAI.builder().inputAgent(this).build());
+            addBehaviour(TickSenderInputBehaviourOpenAI.builder().inputAgent(this).build());
+        }
     }
 }
