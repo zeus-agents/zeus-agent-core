@@ -31,7 +31,7 @@ public class CyclicMiddleBehaviourOpenAI extends CyclicBehaviour {
         // Use MatchAll to see any incoming message
 
         //ACLMessage msg = myAgent.blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-        ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+        ACLMessage msg = myAgent.blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
         if (msg != null) {
             try (ObjectInputStream ois =

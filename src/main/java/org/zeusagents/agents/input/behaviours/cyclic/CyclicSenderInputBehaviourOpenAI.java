@@ -1,8 +1,8 @@
-package org.zeusagents.agents.input.behaviours.tick;
+package org.zeusagents.agents.input.behaviours.cyclic;
 
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.input.InputOpenAIAgent;
@@ -11,18 +11,23 @@ import org.zeusagents.agents.input.data.BasicMessageInputAgent;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
-public class TickSenderInputBehaviourOpenAI extends TickerBehaviour {
+
+public class CyclicSenderInputBehaviourOpenAI extends CyclicBehaviour {
 
     @Builder
-    public TickSenderInputBehaviourOpenAI(Agent inputAgent) {
-        super(inputAgent,1000);
+    public CyclicSenderInputBehaviourOpenAI(Agent inputAgent) {
+        super(inputAgent);
     }
 
     @Override
-    protected void onTick() {
+    public void action() {
+        System.out.println("[Input OpenAPI Agent] Behavior executing. ");
+
         InputOpenAIAgent myInputAgent = (InputOpenAIAgent) myAgent;
 
-        if (!myInputAgent.getMessageCacheQueue().isEmpty()) {
+        while (!myInputAgent.getMessageCacheQueue().isEmpty()) {
+            System.out.println("[Input OpenAPI Agent] Queued message: ");
+            myInputAgent.getMessageCacheQueue().forEach(m -> System.out.println(m.getOntology()));
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
 
             String receiverAgent = getReceiverAgent(inputMsg);
@@ -34,8 +39,12 @@ public class TickSenderInputBehaviourOpenAI extends TickerBehaviour {
                 inputMsg.addReceiver(new AID(receiverAgent, AID.ISLOCALNAME));
                 this.myAgent.send(inputMsg);
                 System.out.println("[Input OpenAPI Agent] Send message: " + inputMsg.getOntology() + ", To: " + receiverAgent);
+            } else {
+                System.out.println("[Input OpenAPI Agent] No message received, blocking");
             }
         }
+        myAgent.removeBehaviour(this);
+
     }
 
     private String getReceiverAgent(ACLMessage inputMsg){

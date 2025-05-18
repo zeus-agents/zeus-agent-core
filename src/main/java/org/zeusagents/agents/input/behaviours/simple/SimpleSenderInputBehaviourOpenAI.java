@@ -5,44 +5,47 @@ import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
+import org.zeusagents.agents.input.InputOpenAIAgent;
 import org.zeusagents.agents.input.data.BasicMessageInputAgent;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
-public class SimpleInputBehaviourOpenAI extends SimpleBehaviour {
+public class SimpleSenderInputBehaviourOpenAI extends SimpleBehaviour {
 
     private int receivedCount = 0;
 
     @Builder
-    public SimpleInputBehaviourOpenAI(Agent inputAgent) {
+    public SimpleSenderInputBehaviourOpenAI(Agent inputAgent) {
         super(inputAgent);
     }
 
     @Override
     public void action() {
-        System.out.println("[Input OpenAPI Agent] Behavior executing");
+        InputOpenAIAgent myInputAgent = (InputOpenAIAgent) myAgent;
 
-        ACLMessage inputMsg = (ACLMessage) myAgent.getO2AObject();
+        if (!myInputAgent.getMessageCacheQueue().isEmpty()) {
+            ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
 
-        String receiverAgent = getReceiverAgent(inputMsg);
+            String receiverAgent = getReceiverAgent(inputMsg);
 
-        if (inputMsg != null && receiverAgent != null) {
-            inputMsg.setSender(this.myAgent.getAID());
-            inputMsg.clearAllReceiver();
-            inputMsg.addReceiver(new AID(receiverAgent, AID.ISLOCALNAME));
-            this.myAgent.send(inputMsg);
-            receivedCount++;
-        } else {
-            System.out.println("[Input OpenAPI Agent] No message received, blocking");
-            block();
+            if (inputMsg != null && receiverAgent != null) {
+                inputMsg.setSender(this.myAgent.getAID());
+                inputMsg.clearAllReceiver();
+                inputMsg.addReceiver(new AID(receiverAgent, AID.ISLOCALNAME));
+                this.myAgent.send(inputMsg);
+                System.out.println("[Input OpenAPI Agent] Send message: " + inputMsg.getOntology() + ", To: " + receiverAgent);
+                receivedCount++;
+            } else {
+                System.out.println("[Input OpenAPI Agent] No message received, blocking");
+                block();
+            }
         }
-
     }
 
     @Override
     public boolean done() {
-        if (receivedCount >= 2) {
+        if (receivedCount >= 5) {
             System.out.println(myAgent.getLocalName() + " finished processing");
             return true;
         }
