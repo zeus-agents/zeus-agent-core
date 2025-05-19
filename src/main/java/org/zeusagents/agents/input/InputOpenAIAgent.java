@@ -9,8 +9,7 @@ import org.zeusagents.agents.input.behaviours.simple.SimpleReceiverInputBehaviou
 import org.zeusagents.agents.input.behaviours.simple.SimpleSenderInputBehaviourOpenAI;
 import org.zeusagents.agents.input.behaviours.tick.TickReceiverInputBehaviourOpenAI;
 import org.zeusagents.agents.input.behaviours.tick.TickSenderInputBehaviourOpenAI;
-import org.zeusagents.agents.input.config.InputBehaviourTypes;
-import org.zeusagents.agents.input.config.InputOpenAIConfig;
+import org.zeusagents.agents.input.config.*;
 
 import java.util.*;
 
@@ -40,17 +39,20 @@ public class InputOpenAIAgent extends Agent {
     private void selectBehaviour(){
         if(inputOpenAIConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)){
             //In this case the Cyclic Sender is created by the Receiver to upgrade the CPU performance.
+            CyclicInputOpenAIConfig cyclicInputOpenAIConfig = (CyclicInputOpenAIConfig) inputOpenAIConfig;
             addBehaviour(CyclicReceiverInputBehaviourOpenAI.builder().inputAgent(this).build());
         }
 
         if(inputOpenAIConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)){
-            addBehaviour(SimpleReceiverInputBehaviourOpenAI.builder().inputAgent(this).build());
-            addBehaviour(SimpleSenderInputBehaviourOpenAI.builder().inputAgent(this).build());
+            SimpleInputOpenAIConfig simpleInputOpenAIConfig = (SimpleInputOpenAIConfig) inputOpenAIConfig;
+            addBehaviour(SimpleReceiverInputBehaviourOpenAI.builder().inputAgent(this).maxReceived(simpleInputOpenAIConfig.getMaxReceived()).build());
+            addBehaviour(SimpleSenderInputBehaviourOpenAI.builder().inputAgent(this).maxReceived(simpleInputOpenAIConfig.getMaxReceived()).build());
         }
 
         if(inputOpenAIConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI)){
-            addBehaviour(TickReceiverInputBehaviourOpenAI.builder().inputAgent(this).build());
-            addBehaviour(TickSenderInputBehaviourOpenAI.builder().inputAgent(this).build());
+            TickInputOpenAIConfig tickInputOpenAIConfig = (TickInputOpenAIConfig) inputOpenAIConfig;
+            addBehaviour(TickReceiverInputBehaviourOpenAI.builder().inputAgent(this).period(tickInputOpenAIConfig.getPeriodReceiver()).build());
+            addBehaviour(TickSenderInputBehaviourOpenAI.builder().inputAgent(this).period(tickInputOpenAIConfig.getPeriodSender()).build());
         }
     }
 }

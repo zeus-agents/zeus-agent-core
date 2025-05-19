@@ -1,13 +1,14 @@
 package org.zeusagents.agents.input.config;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.List;
-import java.util.Map;
+@Getter
+@Setter
+public abstract class InputOpenAIConfig {
+    protected InputBehaviourTypes inputBehaviourTypes;
 
-@Data
-@Builder
-public class InputOpenAIConfig {
-    private InputBehaviourTypes inputBehaviourTypes;
+    public InputOpenAIConfig(InputBehaviourTypes inputBehaviourTypes) {
+        this.inputBehaviourTypes = inputBehaviourTypes;
+    }
 }

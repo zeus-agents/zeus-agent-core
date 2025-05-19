@@ -11,9 +11,11 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.InputOpenAIConfig;
+import org.zeusagents.agents.input.config.TickInputOpenAIConfig;
 import org.zeusagents.agents.input.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
 import org.zeusagents.agents.middle.config.MiddleOpenAIConfig;
+import org.zeusagents.agents.middle.config.TickMiddleOpenAIConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
 import java.io.ByteArrayOutputStream;
@@ -32,8 +34,10 @@ public class TickMain {
             createMiddleAgent(mainContainer, "middleOpenAIAgent1");
             createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder()
+            TickInputOpenAIConfig inputOpenAIConfig = TickInputOpenAIConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI)
+                    .periodReceiver(200)
+                    .periodSender(1000)
                     .build();
 
             Object[] inputObjects = new Object[1];
@@ -59,9 +63,10 @@ public class TickMain {
     }
 
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
-        MiddleOpenAIConfig middleOpenAIConfig = MiddleOpenAIConfig.builder()
+        TickMiddleOpenAIConfig middleOpenAIConfig = TickMiddleOpenAIConfig.builder()
                 .openAIClient(new OpenAITextGeneratorClient())
                 .middleBehaviourType(MiddleBehaviourType.TICK_MIDDLE_BEHAVIOUR_OPENAI)
+                .period(200)
                 .build();
 
         Object[] middleObjects = new Object[1];

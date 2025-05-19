@@ -10,9 +10,11 @@ import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.InputOpenAIConfig;
+import org.zeusagents.agents.input.config.SimpleInputOpenAIConfig;
 import org.zeusagents.agents.input.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
 import org.zeusagents.agents.middle.config.MiddleOpenAIConfig;
+import org.zeusagents.agents.middle.config.SimpleMiddleOpenAIConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
 import java.io.ByteArrayOutputStream;
@@ -29,8 +31,9 @@ public class SimpleMain {
             createMiddleAgent(mainContainer, "middleOpenAIAgent1");
             createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder()
+            SimpleInputOpenAIConfig inputOpenAIConfig = SimpleInputOpenAIConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)
+                    .maxReceived(2)
                     .build();
 
             Object[] inputObjects = new Object[1];
@@ -52,9 +55,10 @@ public class SimpleMain {
     }
 
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
-        MiddleOpenAIConfig middleOpenAIConfig = MiddleOpenAIConfig.builder()
+        SimpleMiddleOpenAIConfig middleOpenAIConfig = SimpleMiddleOpenAIConfig.builder()
                 .openAIClient(new OpenAITextGeneratorClient())
                 .middleBehaviourType(MiddleBehaviourType.SIMPLE_MIDDLE_BEHAVIOUR_OPENAI)
+                .maxReceived(1)
                 .build();
 
         Object[] middleObjects = new Object[1];

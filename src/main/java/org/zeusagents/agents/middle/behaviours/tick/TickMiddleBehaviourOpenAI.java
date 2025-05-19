@@ -15,8 +15,8 @@ public class TickMiddleBehaviourOpenAI extends TickerBehaviour {
     private OpenAIClient openAIClient;
 
     @Builder
-    public TickMiddleBehaviourOpenAI(Agent agent, OpenAIClient openAIClient) {
-        super(agent, 200);
+    public TickMiddleBehaviourOpenAI(Agent agent, OpenAIClient openAIClient, long period) {
+        super(agent, period);
         this.openAIClient = openAIClient;
     }
 

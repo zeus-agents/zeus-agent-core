@@ -4,8 +4,7 @@ import jade.core.Agent;
 import org.zeusagents.agents.middle.behaviours.cyclic.CyclicMiddleBehaviourOpenAI;
 import org.zeusagents.agents.middle.behaviours.simple.SimpleMiddleBehaviourOpenAI;
 import org.zeusagents.agents.middle.behaviours.tick.TickMiddleBehaviourOpenAI;
-import org.zeusagents.agents.middle.config.MiddleBehaviourType;
-import org.zeusagents.agents.middle.config.MiddleOpenAIConfig;
+import org.zeusagents.agents.middle.config.*;
 
 public class MiddleOpenAIAgent extends Agent {
 
@@ -27,15 +26,18 @@ public class MiddleOpenAIAgent extends Agent {
 
     private void activateBehaviours(){
         if(middleOpenAIConfig.getMiddleBehaviourType().equals(MiddleBehaviourType.CYCLIC_MIDDLE_BEHAVIOUR_OPENAI)){
+            CyclicMiddleOpenAIConfig cyclicMiddleOpenAIConfig = (CyclicMiddleOpenAIConfig) middleOpenAIConfig;
             addBehaviour(CyclicMiddleBehaviourOpenAI.builder().agent(this).openAIClient(middleOpenAIConfig.getOpenAIClient()).build());
         }
 
         if(middleOpenAIConfig.getMiddleBehaviourType().equals(MiddleBehaviourType.SIMPLE_MIDDLE_BEHAVIOUR_OPENAI)){
-            addBehaviour(SimpleMiddleBehaviourOpenAI.builder().agent(this).openAIClient(middleOpenAIConfig.getOpenAIClient()).build());
+            SimpleMiddleOpenAIConfig simpleMiddleOpenAIConfig = (SimpleMiddleOpenAIConfig) middleOpenAIConfig;
+            addBehaviour(SimpleMiddleBehaviourOpenAI.builder().agent(this).openAIClient(middleOpenAIConfig.getOpenAIClient()).maxReceived(simpleMiddleOpenAIConfig.getMaxReceived()).build());
         }
 
         if(middleOpenAIConfig.getMiddleBehaviourType().equals(MiddleBehaviourType.TICK_MIDDLE_BEHAVIOUR_OPENAI)){
-            addBehaviour(TickMiddleBehaviourOpenAI.builder().agent(this).openAIClient(middleOpenAIConfig.getOpenAIClient()).build());
+            TickMiddleOpenAIConfig tickMiddleOpenAIConfig = (TickMiddleOpenAIConfig) middleOpenAIConfig;
+            addBehaviour(TickMiddleBehaviourOpenAI.builder().agent(this).openAIClient(middleOpenAIConfig.getOpenAIClient()).period(tickMiddleOpenAIConfig.getPeriod()).build());
         }
     }
 }

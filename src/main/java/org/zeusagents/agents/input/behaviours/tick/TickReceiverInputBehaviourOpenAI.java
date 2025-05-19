@@ -14,8 +14,8 @@ public class TickReceiverInputBehaviourOpenAI extends TickerBehaviour {
 
 
     @Builder
-    public TickReceiverInputBehaviourOpenAI(Agent inputAgent) {
-        super(inputAgent,200);
+    public TickReceiverInputBehaviourOpenAI(Agent inputAgent, long period) {
+        super(inputAgent,period);
     }
 
     @Override

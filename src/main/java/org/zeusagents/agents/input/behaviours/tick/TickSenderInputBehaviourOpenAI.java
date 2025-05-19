@@ -14,8 +14,8 @@ import java.io.ObjectInputStream;
 public class TickSenderInputBehaviourOpenAI extends TickerBehaviour {
 
     @Builder
-    public TickSenderInputBehaviourOpenAI(Agent inputAgent) {
-        super(inputAgent,1000);
+    public TickSenderInputBehaviourOpenAI(Agent inputAgent, long period) {
+        super(inputAgent,period);
     }
 
     @Override

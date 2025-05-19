@@ -14,12 +14,14 @@ import java.io.ObjectInputStream;
 public class SimpleMiddleBehaviourOpenAI extends SimpleBehaviour {
 
     private int receivedCount = 0;
+    private final int maxReceived;
     private OpenAIClient openAIClient;
 
     @Builder
-    public SimpleMiddleBehaviourOpenAI(Agent agent, OpenAIClient openAIClient) {
+    public SimpleMiddleBehaviourOpenAI(Agent agent, OpenAIClient openAIClient, int maxReceived) {
         super(agent);
         this.openAIClient = openAIClient;
+        this.maxReceived=maxReceived;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class SimpleMiddleBehaviourOpenAI extends SimpleBehaviour {
             System.out.println("Content: " + data.getContent());
             System.out.println("Performative: " + ACLMessage.getPerformative(msg.getPerformative()));
             System.out.println("=======================");
-            receivedCount++;
+            this.receivedCount++;
         } else {
             System.out.println("[Middle OpenAPI Agent] No message received, blocking");
             block();
@@ -55,7 +57,7 @@ public class SimpleMiddleBehaviourOpenAI extends SimpleBehaviour {
 
     @Override
     public boolean done() {
-        if (receivedCount >= 1) {
+        if (this.receivedCount >= this.maxReceived) {
             System.out.println(myAgent.getLocalName() + " finished processing");
             return true;
         }

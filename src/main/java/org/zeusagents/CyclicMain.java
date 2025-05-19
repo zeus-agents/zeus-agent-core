@@ -9,9 +9,11 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
+import org.zeusagents.agents.input.config.CyclicInputOpenAIConfig;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.InputOpenAIConfig;
 import org.zeusagents.agents.input.data.BasicMessageInputAgent;
+import org.zeusagents.agents.middle.config.CyclicMiddleOpenAIConfig;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
 import org.zeusagents.agents.middle.config.MiddleOpenAIConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
@@ -32,7 +34,7 @@ public class CyclicMain {
             createMiddleAgent(mainContainer, "middleOpenAIAgent1");
             createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            InputOpenAIConfig inputOpenAIConfig = InputOpenAIConfig.builder()
+            CyclicInputOpenAIConfig inputOpenAIConfig = CyclicInputOpenAIConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)
                     .build();
 
@@ -62,7 +64,7 @@ public class CyclicMain {
     }
 
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
-        MiddleOpenAIConfig middleOpenAIConfig = MiddleOpenAIConfig.builder()
+        CyclicMiddleOpenAIConfig middleOpenAIConfig = CyclicMiddleOpenAIConfig.builder()
                 .openAIClient(new OpenAITextGeneratorClient())
                 .middleBehaviourType(MiddleBehaviourType.CYCLIC_MIDDLE_BEHAVIOUR_OPENAI)
                 .build();

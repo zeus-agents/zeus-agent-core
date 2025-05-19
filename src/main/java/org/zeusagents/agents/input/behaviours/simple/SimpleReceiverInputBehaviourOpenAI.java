@@ -12,10 +12,12 @@ import java.io.ObjectInputStream;
 
 public class SimpleReceiverInputBehaviourOpenAI  extends SimpleBehaviour {
     private int receivedCount = 0;
+    private int maxReceived;
 
     @Builder
-    public SimpleReceiverInputBehaviourOpenAI(Agent inputAgent) {
+    public SimpleReceiverInputBehaviourOpenAI(Agent inputAgent, int maxReceived) {
         super(inputAgent);
+        this.maxReceived= maxReceived;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class SimpleReceiverInputBehaviourOpenAI  extends SimpleBehaviour {
 
     @Override
     public boolean done() {
-        if (receivedCount >= 5) {
+        if (receivedCount >= maxReceived) {
             System.out.println(myAgent.getLocalName() + " finished processing");
             return true;
         }
