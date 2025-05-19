@@ -6,7 +6,7 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.input.InputOpenAIAgent;
-import org.zeusagents.agents.input.data.BasicMessageInputAgent;
+import org.zeusagents.agents.data.BasicMessageInputAgent;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;

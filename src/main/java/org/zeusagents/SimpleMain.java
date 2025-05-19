@@ -9,11 +9,9 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
-import org.zeusagents.agents.input.config.InputOpenAIConfig;
 import org.zeusagents.agents.input.config.SimpleInputOpenAIConfig;
-import org.zeusagents.agents.input.data.BasicMessageInputAgent;
+import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
-import org.zeusagents.agents.middle.config.MiddleOpenAIConfig;
 import org.zeusagents.agents.middle.config.SimpleMiddleOpenAIConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 

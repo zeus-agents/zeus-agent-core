@@ -4,7 +4,7 @@ import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
-import org.zeusagents.agents.input.data.BasicMessageInputAgent;
+import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.openai.OpenAIClient;
 
 import java.io.ByteArrayInputStream;

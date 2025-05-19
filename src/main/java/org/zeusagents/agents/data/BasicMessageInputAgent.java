@@ -1,4 +1,4 @@
-package org.zeusagents.agents.input.data;
+package org.zeusagents.agents.data;
 
 import lombok.Builder;
 import lombok.Data;

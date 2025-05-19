@@ -10,17 +10,14 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
-import org.zeusagents.agents.input.config.InputOpenAIConfig;
 import org.zeusagents.agents.input.config.TickInputOpenAIConfig;
-import org.zeusagents.agents.input.data.BasicMessageInputAgent;
+import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
-import org.zeusagents.agents.middle.config.MiddleOpenAIConfig;
 import org.zeusagents.agents.middle.config.TickMiddleOpenAIConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
-import java.util.Map;
 
 public class TickMain {
 
