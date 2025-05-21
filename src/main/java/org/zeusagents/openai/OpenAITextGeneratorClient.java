@@ -1,6 +1,6 @@
 package org.zeusagents.openai;
 
-public class OpenAITextGeneratorClient implements OpenAIClient{
+public class OpenAITextGeneratorClient implements AIClient {
 
     @Override
     public String execute() {

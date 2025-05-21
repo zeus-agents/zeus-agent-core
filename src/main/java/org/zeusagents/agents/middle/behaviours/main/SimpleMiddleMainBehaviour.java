@@ -1,4 +1,4 @@
-package org.zeusagents.agents.middle.behaviours.simple;
+package org.zeusagents.agents.middle.behaviours.main;
 
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
@@ -6,21 +6,21 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.openai.OpenAIClient;
+import org.zeusagents.openai.AIClient;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
-public class SimpleMiddleBehaviourOpenAI extends SimpleBehaviour {
+public class SimpleMiddleMainBehaviour extends SimpleBehaviour {
 
     private int receivedCount = 0;
     private final int maxReceived;
-    private OpenAIClient openAIClient;
+    private AIClient AIClient;
 
     @Builder
-    public SimpleMiddleBehaviourOpenAI(Agent agent, OpenAIClient openAIClient, int maxReceived) {
+    public SimpleMiddleMainBehaviour(Agent agent, AIClient AIClient, int maxReceived) {
         super(agent);
-        this.openAIClient = openAIClient;
+        this.AIClient = AIClient;
         this.maxReceived=maxReceived;
     }
 

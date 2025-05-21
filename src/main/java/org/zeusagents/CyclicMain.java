@@ -12,7 +12,7 @@ import jade.wrapper.StaleProxyException;
 import org.zeusagents.agents.input.config.CyclicInputOpenAIConfig;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.agents.middle.config.CyclicMiddleOpenAIConfig;
+import org.zeusagents.agents.middle.config.CyclicMiddleMainConfig;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
@@ -61,8 +61,8 @@ public class CyclicMain {
     }
 
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
-        CyclicMiddleOpenAIConfig middleOpenAIConfig = CyclicMiddleOpenAIConfig.builder()
-                .openAIClient(new OpenAITextGeneratorClient())
+        CyclicMiddleMainConfig middleOpenAIConfig = CyclicMiddleMainConfig.builder()
+                .AIClient(new OpenAITextGeneratorClient())
                 .middleBehaviourType(MiddleBehaviourType.CYCLIC_MIDDLE_BEHAVIOUR_OPENAI)
                 .build();
 

@@ -13,7 +13,7 @@ import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.TickInputOpenAIConfig;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
-import org.zeusagents.agents.middle.config.TickMiddleOpenAIConfig;
+import org.zeusagents.agents.middle.config.TickMiddleMainConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
 import java.io.ByteArrayOutputStream;
@@ -60,8 +60,8 @@ public class TickMain {
     }
 
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
-        TickMiddleOpenAIConfig middleOpenAIConfig = TickMiddleOpenAIConfig.builder()
-                .openAIClient(new OpenAITextGeneratorClient())
+        TickMiddleMainConfig middleOpenAIConfig = TickMiddleMainConfig.builder()
+                .AIClient(new OpenAITextGeneratorClient())
                 .middleBehaviourType(MiddleBehaviourType.TICK_MIDDLE_BEHAVIOUR_OPENAI)
                 .period(200)
                 .build();

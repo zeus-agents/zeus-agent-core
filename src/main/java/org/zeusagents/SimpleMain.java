@@ -12,7 +12,7 @@ import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.SimpleInputOpenAIConfig;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.MiddleBehaviourType;
-import org.zeusagents.agents.middle.config.SimpleMiddleOpenAIConfig;
+import org.zeusagents.agents.middle.config.SimpleMiddleMainConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
 import java.io.ByteArrayOutputStream;
@@ -53,8 +53,8 @@ public class SimpleMain {
     }
 
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
-        SimpleMiddleOpenAIConfig middleOpenAIConfig = SimpleMiddleOpenAIConfig.builder()
-                .openAIClient(new OpenAITextGeneratorClient())
+        SimpleMiddleMainConfig middleOpenAIConfig = SimpleMiddleMainConfig.builder()
+                .AIClient(new OpenAITextGeneratorClient())
                 .middleBehaviourType(MiddleBehaviourType.SIMPLE_MIDDLE_BEHAVIOUR_OPENAI)
                 .maxReceived(1)
                 .build();

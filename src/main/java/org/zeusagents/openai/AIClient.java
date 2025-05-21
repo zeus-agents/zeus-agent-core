@@ -1,6 +1,6 @@
 package org.zeusagents.openai;
 
-public interface OpenAIClient {
+public interface AIClient {
 
     String execute();
 }

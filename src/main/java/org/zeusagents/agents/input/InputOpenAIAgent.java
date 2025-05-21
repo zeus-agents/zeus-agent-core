@@ -15,7 +15,7 @@ import java.util.*;
 
 @Getter
 public class InputOpenAIAgent extends Agent {
-    Queue<ACLMessage> messageCacheQueue = new LinkedList<>();
+    private final Queue<ACLMessage> messageCacheQueue = new LinkedList<>();
     private InputOpenAIConfig inputOpenAIConfig;
 
     protected void setup() {
