@@ -9,15 +9,20 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
+import org.zeusagents.OutputClient.PrintOutputClient;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.TickInputOpenAIConfig;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
+import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
 import org.zeusagents.agents.middle.config.TickMiddleMainConfig;
 import org.zeusagents.AIClient.TextGeneratorClient;
+import org.zeusagents.inputClient.InputACLMessageClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class TickMain {
 
@@ -60,8 +65,14 @@ public class TickMain {
     }
 
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
+        Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient = new LinkedHashMap<>(); //keep the insertion order
+        orderBehaviourWithClient.put(MiddleFuncBehaviourtype.RECEIVER_BEHAVIOUR, new InputACLMessageClient());
+        orderBehaviourWithClient.put(MiddleFuncBehaviourtype.GENERATOR_BEHAVIOUR, new TextGeneratorClient());
+        orderBehaviourWithClient.put(MiddleFuncBehaviourtype.FINAL_BEHAVIOUR, new PrintOutputClient());
+
         TickMiddleMainConfig middleOpenAIConfig = TickMiddleMainConfig.builder()
                 .middleMainBehaviourType(MiddleMainBehaviourType.TICK)
+                .orderBehaviourWithClient(orderBehaviourWithClient)
                 .period(200)
                 .build();
 

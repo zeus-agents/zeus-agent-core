@@ -22,10 +22,13 @@ public class CyclicMiddleMainBehaviour extends CyclicBehaviour {
 
         ACLMessage msg = this.myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
-        MiddleOpenAIAgent midAgent = (MiddleOpenAIAgent) this.myAgent;
-        midAgent.getMessageCacheQueue().add(msg);
-        midAgent.addBehaviour(MiddleFSMBehaviour.builder().midAgent(this.myAgent).build());
-
+        if (msg != null) {
+            MiddleOpenAIAgent midAgent = (MiddleOpenAIAgent) this.myAgent;
+            midAgent.getMessageCacheQueue().add(msg);
+            midAgent.addBehaviour(MiddleFSMBehaviour.builder().midAgent(this.myAgent).build());
+        } else {
+            System.out.println("[Middle OpenAPI Agent] No message received, blocking");
+        }
         block();
     }
 }
