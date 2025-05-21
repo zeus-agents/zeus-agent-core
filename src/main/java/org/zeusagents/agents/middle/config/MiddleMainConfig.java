@@ -4,14 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.zeusagents.openai.AIClient;
 
+import java.util.List;
+
 @Getter
 @Setter
 public abstract class MiddleMainConfig {
     private AIClient AIClient;
-    private MiddleBehaviourType middleBehaviourType;
+    private List<MiddleFuncBehaviourtype> orderList;
+    private MiddleMainBehaviourType middleMainBehaviourType;
 
-    public MiddleMainConfig(AIClient AIClient, MiddleBehaviourType middleBehaviourType) {
+    public MiddleMainConfig(AIClient AIClient, MiddleMainBehaviourType middleMainBehaviourType, List<MiddleFuncBehaviourtype> orderList) {
         this.AIClient = AIClient;
-        this.middleBehaviourType = middleBehaviourType;
+        this.middleMainBehaviourType = middleMainBehaviourType;
+        this.orderList = orderList;
     }
 }

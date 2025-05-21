@@ -1,8 +1,6 @@
 package org.zeusagents.agents.middle;
 
 import jade.core.Agent;
-import jade.core.behaviours.DataStore;
-import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,17 +37,17 @@ public class MiddleOpenAIAgent extends Agent {
     }
 
     private void activateBehaviours(){
-        if(middleMainConfig.getMiddleBehaviourType().equals(MiddleBehaviourType.CYCLIC_MIDDLE_BEHAVIOUR_OPENAI)){
+        if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.CYCLIC)){
             CyclicMiddleMainConfig cyclicMiddleMainConfig = (CyclicMiddleMainConfig) middleMainConfig;
-            addBehaviour(CyclicMiddleMainBehaviour.builder().agent(this).AIClient(middleMainConfig.getAIClient()).build());
+            addBehaviour(CyclicMiddleMainBehaviour.builder().agent(this).build());
         }
 
-        if(middleMainConfig.getMiddleBehaviourType().equals(MiddleBehaviourType.SIMPLE_MIDDLE_BEHAVIOUR_OPENAI)){
+        if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.SIMPLE)){
             SimpleMiddleMainConfig simpleMiddleOpenAIConfig = (SimpleMiddleMainConfig) middleMainConfig;
             addBehaviour(SimpleMiddleMainBehaviour.builder().agent(this).AIClient(middleMainConfig.getAIClient()).maxReceived(simpleMiddleOpenAIConfig.getMaxReceived()).build());
         }
 
-        if(middleMainConfig.getMiddleBehaviourType().equals(MiddleBehaviourType.TICK_MIDDLE_BEHAVIOUR_OPENAI)){
+        if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.TICK)){
             TickMiddleMainConfig tickMiddleOpenAIConfig = (TickMiddleMainConfig) middleMainConfig;
             addBehaviour(TickMiddleMainBehaviour.builder().agent(this).AIClient(middleMainConfig.getAIClient()).period(tickMiddleOpenAIConfig.getPeriod()).build());
         }

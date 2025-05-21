@@ -6,17 +6,14 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import lombok.Builder;
 import org.zeusagents.agents.middle.MiddleOpenAIAgent;
-import org.zeusagents.openai.AIClient;
+import org.zeusagents.agents.middle.behaviours.schema.MiddleFSMBehaviour;
 
 
 public class CyclicMiddleMainBehaviour extends CyclicBehaviour {
 
-    private AIClient AIClient;
-
     @Builder
-    public CyclicMiddleMainBehaviour(Agent agent, AIClient AIClient) {
+    public CyclicMiddleMainBehaviour(Agent agent) {
         super(agent);
-        this.AIClient = AIClient;
     }
 
     @Override
@@ -27,7 +24,7 @@ public class CyclicMiddleMainBehaviour extends CyclicBehaviour {
 
         MiddleOpenAIAgent midAgent = (MiddleOpenAIAgent) this.myAgent;
         midAgent.getMessageCacheQueue().add(msg);
-        midAgent.addBehaviour(CyclicFSMiddleMainBehaviour.builder().midAgent(this.myAgent).build());
+        midAgent.addBehaviour(MiddleFSMBehaviour.builder().midAgent(this.myAgent).build());
 
         block();
     }

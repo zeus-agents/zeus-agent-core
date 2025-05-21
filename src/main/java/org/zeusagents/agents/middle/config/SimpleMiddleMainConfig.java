@@ -5,14 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.zeusagents.openai.AIClient;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class SimpleMiddleMainConfig extends MiddleMainConfig {
     private int maxReceived;
 
     @Builder
-    public SimpleMiddleMainConfig(AIClient AIClient, MiddleBehaviourType middleBehaviourType, int maxReceived) {
-        super(AIClient, middleBehaviourType);
+    public SimpleMiddleMainConfig(AIClient AIClient, MiddleMainBehaviourType middleMainBehaviourType, int maxReceived, List<MiddleFuncBehaviourtype> orderList) {
+        super(AIClient, middleMainBehaviourType, orderList);
         this.maxReceived = maxReceived;
     }
 }

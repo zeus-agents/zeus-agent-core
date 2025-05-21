@@ -20,7 +20,7 @@ public class ReceiverMiddleBehaviour extends OneShotBehaviour {
 
     @Override
     public void action() {
-        ACLMessage msg = (ACLMessage) getDataStore().get("incoming-msg");
+        ACLMessage msg = (ACLMessage) getDataStore().get("first-msg");
 
         BasicMessageInputAgent data = null;
 

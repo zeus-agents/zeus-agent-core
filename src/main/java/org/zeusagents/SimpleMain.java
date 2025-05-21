@@ -11,7 +11,7 @@ import jade.wrapper.StaleProxyException;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.SimpleInputOpenAIConfig;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.agents.middle.config.MiddleBehaviourType;
+import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
 import org.zeusagents.agents.middle.config.SimpleMiddleMainConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
@@ -55,7 +55,7 @@ public class SimpleMain {
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
         SimpleMiddleMainConfig middleOpenAIConfig = SimpleMiddleMainConfig.builder()
                 .AIClient(new OpenAITextGeneratorClient())
-                .middleBehaviourType(MiddleBehaviourType.SIMPLE_MIDDLE_BEHAVIOUR_OPENAI)
+                .middleMainBehaviourType(MiddleMainBehaviourType.SIMPLE)
                 .maxReceived(1)
                 .build();
 

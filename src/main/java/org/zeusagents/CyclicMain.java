@@ -13,11 +13,13 @@ import org.zeusagents.agents.input.config.CyclicInputOpenAIConfig;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.CyclicMiddleMainConfig;
-import org.zeusagents.agents.middle.config.MiddleBehaviourType;
+import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
+import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 public class CyclicMain {
     public static void main(String[] args) {
@@ -61,9 +63,14 @@ public class CyclicMain {
     }
 
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
+        List<MiddleFuncBehaviourtype> orderBehaviours = List.of(MiddleFuncBehaviourtype.RECEIVER_BEHAVIOUR,
+                MiddleFuncBehaviourtype.GENERATOR_BEHAVIOUR,
+                MiddleFuncBehaviourtype.FINAL_BEHAVIOUR);
+
         CyclicMiddleMainConfig middleOpenAIConfig = CyclicMiddleMainConfig.builder()
                 .AIClient(new OpenAITextGeneratorClient())
-                .middleBehaviourType(MiddleBehaviourType.CYCLIC_MIDDLE_BEHAVIOUR_OPENAI)
+                .middleMainBehaviourType(MiddleMainBehaviourType.CYCLIC)
+                .orderList(orderBehaviours)
                 .build();
 
         Object[] middleObjects = new Object[1];

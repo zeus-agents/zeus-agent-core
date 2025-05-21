@@ -12,7 +12,7 @@ import jade.wrapper.StaleProxyException;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.TickInputOpenAIConfig;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.agents.middle.config.MiddleBehaviourType;
+import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
 import org.zeusagents.agents.middle.config.TickMiddleMainConfig;
 import org.zeusagents.openai.OpenAITextGeneratorClient;
 
@@ -62,7 +62,7 @@ public class TickMain {
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
         TickMiddleMainConfig middleOpenAIConfig = TickMiddleMainConfig.builder()
                 .AIClient(new OpenAITextGeneratorClient())
-                .middleBehaviourType(MiddleBehaviourType.TICK_MIDDLE_BEHAVIOUR_OPENAI)
+                .middleMainBehaviourType(MiddleMainBehaviourType.TICK)
                 .period(200)
                 .build();
 

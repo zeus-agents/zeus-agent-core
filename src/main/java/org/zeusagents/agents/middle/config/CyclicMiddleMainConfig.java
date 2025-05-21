@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.zeusagents.openai.AIClient;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class CyclicMiddleMainConfig extends MiddleMainConfig {
 
     @Builder
-    public CyclicMiddleMainConfig(AIClient AIClient, MiddleBehaviourType middleBehaviourType) {
-        super(AIClient, middleBehaviourType);
+    public CyclicMiddleMainConfig(AIClient AIClient, MiddleMainBehaviourType middleMainBehaviourType, List<MiddleFuncBehaviourtype> orderList) {
+        super(AIClient, middleMainBehaviourType, orderList);
     }
 }
