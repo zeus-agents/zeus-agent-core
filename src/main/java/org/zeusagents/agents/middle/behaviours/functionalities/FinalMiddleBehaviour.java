@@ -1,28 +1,26 @@
 package org.zeusagents.agents.middle.behaviours.functionalities;
 
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.DataStore;
 import jade.core.behaviours.OneShotBehaviour;
 import lombok.Builder;
+import org.zeusagents.OutputClient.OutputClient;
 
 public class FinalMiddleBehaviour extends OneShotBehaviour {
+    private final OutputClient outputClient;
 
     @Builder
-    public FinalMiddleBehaviour(Agent agent, DataStore ds) {
+    public FinalMiddleBehaviour(Agent agent, DataStore ds, OutputClient outputClient) {
         super(agent);
         this.setDataStore(ds);
+        this.outputClient = outputClient;
     }
 
     @Override
     public void action() {
         String msg = (String) getDataStore().get("result");
-        AID sender = (AID) getDataStore().get("sender");
+        //AID sender = (AID) getDataStore().get("sender");
 
-        System.out.println("=== Received Message ===");
-        System.out.println("Sender: " + sender);
-        System.out.println("Content: " + msg);
-        System.out.println("Agent: " + this.myAgent.getAID());
-        System.out.println("=======================");
+        this.outputClient.execute(msg, myAgent);
     }
 }

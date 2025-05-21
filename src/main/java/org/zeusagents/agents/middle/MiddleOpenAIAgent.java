@@ -44,12 +44,12 @@ public class MiddleOpenAIAgent extends Agent {
 
         if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.SIMPLE)){
             SimpleMiddleMainConfig simpleMiddleOpenAIConfig = (SimpleMiddleMainConfig) middleMainConfig;
-            addBehaviour(SimpleMiddleMainBehaviour.builder().agent(this).AIClient(middleMainConfig.getAIClient()).maxReceived(simpleMiddleOpenAIConfig.getMaxReceived()).build());
+            addBehaviour(SimpleMiddleMainBehaviour.builder().agent(this).maxReceived(simpleMiddleOpenAIConfig.getMaxReceived()).build());
         }
 
         if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.TICK)){
             TickMiddleMainConfig tickMiddleOpenAIConfig = (TickMiddleMainConfig) middleMainConfig;
-            addBehaviour(TickMiddleMainBehaviour.builder().agent(this).AIClient(middleMainConfig.getAIClient()).period(tickMiddleOpenAIConfig.getPeriod()).build());
+            addBehaviour(TickMiddleMainBehaviour.builder().agent(this).period(tickMiddleOpenAIConfig.getPeriod()).build());
         }
     }
 }

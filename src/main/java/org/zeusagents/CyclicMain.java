@@ -9,17 +9,22 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
+import org.zeusagents.OutputClient.PrintOutputClient;
 import org.zeusagents.agents.input.config.CyclicInputOpenAIConfig;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.CyclicMiddleMainConfig;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
-import org.zeusagents.openai.OpenAITextGeneratorClient;
+import org.zeusagents.AIClient.TextGeneratorClient;
+import org.zeusagents.inputClient.InputACLMessageClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class CyclicMain {
     public static void main(String[] args) {
@@ -63,14 +68,14 @@ public class CyclicMain {
     }
 
     private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
-        List<MiddleFuncBehaviourtype> orderBehaviours = List.of(MiddleFuncBehaviourtype.RECEIVER_BEHAVIOUR,
-                MiddleFuncBehaviourtype.GENERATOR_BEHAVIOUR,
-                MiddleFuncBehaviourtype.FINAL_BEHAVIOUR);
+        Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient = new LinkedHashMap<>(); //keep the insertion order
+        orderBehaviourWithClient.put(MiddleFuncBehaviourtype.RECEIVER_BEHAVIOUR, new InputACLMessageClient());
+        orderBehaviourWithClient.put(MiddleFuncBehaviourtype.GENERATOR_BEHAVIOUR, new TextGeneratorClient());
+        orderBehaviourWithClient.put(MiddleFuncBehaviourtype.FINAL_BEHAVIOUR, new PrintOutputClient());
 
         CyclicMiddleMainConfig middleOpenAIConfig = CyclicMiddleMainConfig.builder()
-                .AIClient(new OpenAITextGeneratorClient())
                 .middleMainBehaviourType(MiddleMainBehaviourType.CYCLIC)
-                .orderList(orderBehaviours)
+                .orderBehaviourWithClient(orderBehaviourWithClient)
                 .build();
 
         Object[] middleObjects = new Object[1];

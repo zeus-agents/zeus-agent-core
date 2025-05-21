@@ -8,7 +8,10 @@ import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.middle.MiddleOpenAIAgent;
 import org.zeusagents.agents.middle.behaviours.functionalities.MiddleBehaviourSelector;
+import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainConfig;
+
+import java.util.Map;
 
 public class MiddleFSMBehaviour extends TickerBehaviour {
 
@@ -51,19 +54,28 @@ public class MiddleFSMBehaviour extends TickerBehaviour {
     }
 
     private FSMBehaviour createFSMSequence(MiddleOpenAIAgent midAgent, FSMBehaviour fsm, DataStore ds, MiddleMainConfig middleMainConfig) {
-        int size = middleMainConfig.getOrderList().size();
-        int lastObj = size - 1;
+        int i = 0;
+        String formerBehaviour = null;
 
-        fsm.registerFirstState(MiddleBehaviourSelector.selectMiddleBehaviour(midAgent, ds, middleMainConfig, middleMainConfig.getOrderList().get(0)), middleMainConfig.getOrderList().get(0).name());
+        for(Map.Entry<MiddleFuncBehaviourtype, Object> entry: middleMainConfig.getOrderBehaviourWithClient().entrySet()){
 
-        for (int i = 1; size - 1 > i; i++) {
-            fsm.registerState(MiddleBehaviourSelector.selectMiddleBehaviour(midAgent, ds, middleMainConfig, middleMainConfig.getOrderList().get(i)), middleMainConfig.getOrderList().get(i).name() + i);
+            if(i > 0){
 
-            fsm.registerDefaultTransition(middleMainConfig.getOrderList().get(i - 1).name(), middleMainConfig.getOrderList().get(i).name() + i);
+                if(i >= middleMainConfig.getOrderBehaviourWithClient().size()-1){
+                    fsm.registerLastState(MiddleBehaviourSelector.selectMiddleBehaviour(midAgent, ds, entry.getKey(), entry.getValue()), entry.getKey().name()+i);
+                } else {
+                    fsm.registerState(MiddleBehaviourSelector.selectMiddleBehaviour(midAgent, ds, entry.getKey(), entry.getValue()), entry.getKey().name()+i);
+                }
+
+                fsm.registerDefaultTransition(formerBehaviour+(i-1), entry.getKey().name()+ i);
+
+            } else {
+                fsm.registerFirstState(MiddleBehaviourSelector.selectMiddleBehaviour(midAgent, ds, entry.getKey(), entry.getValue()), entry.getKey().name()+i);
+            }
+
+            formerBehaviour = entry.getKey().name();
+            i++;
         }
-
-        fsm.registerLastState(MiddleBehaviourSelector.selectMiddleBehaviour(midAgent, ds, middleMainConfig, middleMainConfig.getOrderList().get(lastObj)), middleMainConfig.getOrderList().get(lastObj).name() + lastObj);
-        fsm.registerDefaultTransition(middleMainConfig.getOrderList().get(lastObj - 1).name() + (lastObj - 1), middleMainConfig.getOrderList().get(lastObj).name() + lastObj);
 
         return fsm;
     }

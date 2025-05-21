@@ -2,20 +2,22 @@ package org.zeusagents.agents.middle.config;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.zeusagents.openai.AIClient;
+import org.zeusagents.AIClient.AIClient;
+import org.zeusagents.OutputClient.OutputClient;
+import org.zeusagents.inputClient.InputClient;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Getter
 @Setter
 public abstract class MiddleMainConfig {
-    private AIClient AIClient;
-    private List<MiddleFuncBehaviourtype> orderList;
-    private MiddleMainBehaviourType middleMainBehaviourType;
+    MiddleMainBehaviourType middleMainBehaviourType;
+    private Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient;
 
-    public MiddleMainConfig(AIClient AIClient, MiddleMainBehaviourType middleMainBehaviourType, List<MiddleFuncBehaviourtype> orderList) {
-        this.AIClient = AIClient;
+    public MiddleMainConfig(MiddleMainBehaviourType middleMainBehaviourType, Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient) {
         this.middleMainBehaviourType = middleMainBehaviourType;
-        this.orderList = orderList;
+        this.orderBehaviourWithClient = orderBehaviourWithClient;
     }
 }

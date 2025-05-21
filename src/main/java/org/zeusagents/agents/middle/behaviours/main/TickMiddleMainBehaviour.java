@@ -5,19 +5,17 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.openai.AIClient;
+import org.zeusagents.AIClient.AIClient;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
 public class TickMiddleMainBehaviour extends TickerBehaviour {
 
-    private AIClient AIClient;
 
     @Builder
-    public TickMiddleMainBehaviour(Agent agent, AIClient AIClient, long period) {
+    public TickMiddleMainBehaviour(Agent agent, long period) {
         super(agent, period);
-        this.AIClient = AIClient;
     }
 
     @Override

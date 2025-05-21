@@ -6,7 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.openai.AIClient;
+import org.zeusagents.AIClient.AIClient;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
@@ -15,12 +15,10 @@ public class SimpleMiddleMainBehaviour extends SimpleBehaviour {
 
     private int receivedCount = 0;
     private final int maxReceived;
-    private AIClient AIClient;
 
     @Builder
-    public SimpleMiddleMainBehaviour(Agent agent, AIClient AIClient, int maxReceived) {
+    public SimpleMiddleMainBehaviour(Agent agent, int maxReceived) {
         super(agent);
-        this.AIClient = AIClient;
         this.maxReceived=maxReceived;
     }
 

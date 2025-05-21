@@ -1,4 +1,4 @@
-package org.zeusagents.openai;
+package org.zeusagents.AIClient;
 
 public interface AIClient {
 

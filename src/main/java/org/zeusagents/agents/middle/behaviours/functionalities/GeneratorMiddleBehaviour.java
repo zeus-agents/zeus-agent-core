@@ -5,11 +5,11 @@ import jade.core.behaviours.DataStore;
 import jade.core.behaviours.OneShotBehaviour;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.openai.AIClient;
+import org.zeusagents.AIClient.AIClient;
 
 public class GeneratorMiddleBehaviour extends OneShotBehaviour {
 
-    private AIClient AIClient;
+    private final AIClient AIClient;
 
     @Builder
     public GeneratorMiddleBehaviour(Agent agent, DataStore ds, AIClient AIClient) {
@@ -21,9 +21,11 @@ public class GeneratorMiddleBehaviour extends OneShotBehaviour {
     @Override
     public void action() {
         BasicMessageInputAgent input = (BasicMessageInputAgent) getDataStore().get("content");
+
         String execute = AIClient.execute(input.getContent());
+
         getDataStore().put("result", execute);
-        System.out.println("[FSM-PROCESS] " + myAgent.getName()+ "] Transformed");
+        System.out.println("[FSM-PROCESS] " + myAgent.getName() + "] Transformed");
 
     }
 }
