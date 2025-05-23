@@ -24,32 +24,32 @@ public class MiddleOpenAIAgent extends Agent {
         System.out.println("[Middle OpenAPI Agent] ReceiverAgent " + getAID().getName() + " is ready");
 
 
-        this.setQueueSize(10);
-        final Object[] args = getArguments();
+            this.setQueueSize(10);
+            final Object[] args = getArguments();
 
-        if(null != args){
-            middleMainConfig = (MiddleMainConfig) args[0];
-            activateBehaviours();
-            System.out.println("[Middle OpenAPI Agent] SETUP COMPLETE");
-        } else {
-            System.out.println("[Middle OpenAPI Agent] SETUP ERROR!");
-        }
-    }
-
-    private void activateBehaviours(){
-        if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.CYCLIC)){
-            CyclicMiddleMainConfig cyclicMiddleMainConfig = (CyclicMiddleMainConfig) middleMainConfig;
-            addBehaviour(CyclicMiddleMainBehaviour.builder().agent(this).build());
+            if(null != args){
+                middleMainConfig = (MiddleMainConfig) args[0];
+                activateBehaviours();
+                System.out.println("[Middle OpenAPI Agent] SETUP COMPLETE");
+            } else {
+                System.out.println("[Middle OpenAPI Agent] SETUP ERROR!");
+            }
         }
 
-        if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.SIMPLE)){
-            SimpleMiddleMainConfig simpleMiddleOpenAIConfig = (SimpleMiddleMainConfig) middleMainConfig;
-            addBehaviour(SimpleMiddleMainBehaviour.builder().agent(this).maxReceived(simpleMiddleOpenAIConfig.getMaxReceived()).build());
-        }
+        private void activateBehaviours(){
+            if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.CYCLIC)){
+                CyclicMiddleMainConfig cyclicMiddleMainConfig = (CyclicMiddleMainConfig) middleMainConfig;
+                addBehaviour(CyclicMiddleMainBehaviour.builder().agent(this).build());
+            }
 
-        if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.TICK)){
-            TickMiddleMainConfig tickMiddleOpenAIConfig = (TickMiddleMainConfig) middleMainConfig;
-            addBehaviour(TickMiddleMainBehaviour.builder().agent(this).period(tickMiddleOpenAIConfig.getPeriod()).build());
+            if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.SIMPLE)){
+                SimpleMiddleMainConfig simpleMiddleOpenAIConfig = (SimpleMiddleMainConfig) middleMainConfig;
+                addBehaviour(SimpleMiddleMainBehaviour.builder().agent(this).maxReceived(simpleMiddleOpenAIConfig.getMaxReceived()).build());
+            }
+
+            if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.TICK)){
+                TickMiddleMainConfig tickMiddleOpenAIConfig = (TickMiddleMainConfig) middleMainConfig;
+                addBehaviour(TickMiddleMainBehaviour.builder().agent(this).period(tickMiddleOpenAIConfig.getPeriod()).build());
         }
     }
 }

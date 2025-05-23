@@ -91,7 +91,7 @@ public class CyclicMain {
         try {
             ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
             msg.addReceiver(new AID(inputOpenAIAgent.getName(), AID.ISLOCALNAME));
-            msg.setEncoding("Base64");
+            msg.setEncoding("JADE-Encoding");
             msg.setLanguage("English");
             msg.setOntology(type);  // Using ontology as message type
 
