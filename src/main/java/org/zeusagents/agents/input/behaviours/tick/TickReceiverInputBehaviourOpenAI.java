@@ -6,36 +6,24 @@ import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.input.InputOpenAIAgent;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
+import org.zeusagents.agents.input.behaviours.ReceiverCore;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
 public class TickReceiverInputBehaviourOpenAI extends TickerBehaviour {
 
+    private final ReceiverCore receiverCore;
 
     @Builder
     public TickReceiverInputBehaviourOpenAI(Agent inputAgent, long period) {
         super(inputAgent,period);
+        this.receiverCore = ReceiverCore.builder().myAgent(this.myAgent).build();
     }
 
     @Override
     protected void onTick() {
-        ACLMessage inputMsg = (ACLMessage) myAgent.getO2AObject();
-        if(inputMsg != null){
+        this.receiverCore.receiveMessageTickBehaviour();
 
-            try (ObjectInputStream ois =
-                         new ObjectInputStream(new ByteArrayInputStream(inputMsg.getByteSequenceContent()))) {
-
-                BasicMessageInputAgent data = (BasicMessageInputAgent) ois.readObject();
-
-                InputOpenAIAgent myInputAgent = (InputOpenAIAgent) myAgent;
-                myInputAgent.getMessageCacheQueue().add(inputMsg);
-
-                System.out.println("[Input OpenAPI Agent] Save Ontology: "+inputMsg.getOntology()+", Agent: "+data.getMiddleAgentReceiver());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

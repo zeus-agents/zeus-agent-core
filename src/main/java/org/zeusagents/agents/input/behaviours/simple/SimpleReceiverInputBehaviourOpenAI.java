@@ -2,47 +2,25 @@ package org.zeusagents.agents.input.behaviours.simple;
 
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
-import jade.lang.acl.ACLMessage;
 import lombok.Builder;
-import org.zeusagents.agents.input.InputOpenAIAgent;
-import org.zeusagents.agents.data.BasicMessageInputAgent;
+import org.zeusagents.agents.input.behaviours.ReceiverCore;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-
-public class SimpleReceiverInputBehaviourOpenAI  extends SimpleBehaviour {
+public class SimpleReceiverInputBehaviourOpenAI extends SimpleBehaviour {
     private int receivedCount = 0;
-    private int maxReceived;
+    private final int maxReceived;
+    private final ReceiverCore receiverCore;
 
     @Builder
     public SimpleReceiverInputBehaviourOpenAI(Agent inputAgent, int maxReceived) {
         super(inputAgent);
-        this.maxReceived= maxReceived;
+        this.maxReceived = maxReceived;
+        this.receiverCore = ReceiverCore.builder().myAgent(this.myAgent).build();
     }
 
     @Override
     public void action() {
         System.out.println("[Input OpenAPI Agent] Behavior executing");
-
-        ACLMessage inputMsg = (ACLMessage) myAgent.getO2AObject();
-
-        if(inputMsg != null){
-
-            try (ObjectInputStream ois =
-                         new ObjectInputStream(new ByteArrayInputStream(inputMsg.getByteSequenceContent()))) {
-
-                BasicMessageInputAgent data = (BasicMessageInputAgent) ois.readObject();
-
-                InputOpenAIAgent myInputAgent = (InputOpenAIAgent) myAgent;
-                myInputAgent.getMessageCacheQueue().add(inputMsg);
-                receivedCount++;
-
-                System.out.println("[Input OpenAPI Agent] Save Ontology: "+inputMsg.getOntology()+", Agent: "+data.getMiddleAgentReceiver());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        this.receivedCount = this.receiverCore.receiveMessageSimpleBehaviour(this.receivedCount);
         block();
     }
 

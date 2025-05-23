@@ -49,8 +49,8 @@ public class SimpleMain {
 
 
             Thread.sleep(10000);
-            sendMessage(inputOpenAIAgent, "middleOpenAIAgent1", "CONFIG", "mode=production;timeout=5000");
-            sendMessage(inputOpenAIAgent, "middleOpenAIAgent2", "CONFIG", "mode=production;timeout=5000");
+            sendMessage(inputOpenAIAgent, "middleOpenAIAgent1", "CONFIG", "mode=production;timeout=5001");
+            sendMessage(inputOpenAIAgent, "middleOpenAIAgent2", "CONFIG", "mode=production;timeout=5002");
 
         } catch (StaleProxyException | InterruptedException e) {
             throw new RuntimeException(e);
