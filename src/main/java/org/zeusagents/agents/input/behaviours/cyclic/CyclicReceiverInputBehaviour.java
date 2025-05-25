@@ -5,12 +5,12 @@ import jade.core.behaviours.CyclicBehaviour;
 import lombok.Builder;
 import org.zeusagents.agents.input.behaviours.ReceiverCore;
 
-public class CyclicReceiverInputBehaviourOpenAI extends CyclicBehaviour {
+public class CyclicReceiverInputBehaviour extends CyclicBehaviour {
 
     private final ReceiverCore receiverCore;
 
     @Builder
-    public CyclicReceiverInputBehaviourOpenAI(Agent inputAgent) {
+    public CyclicReceiverInputBehaviour(Agent inputAgent) {
         super(inputAgent);
         this.receiverCore = ReceiverCore.builder().myAgent(this.myAgent).build();
     }

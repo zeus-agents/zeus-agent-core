@@ -5,7 +5,7 @@ import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.input.InputOpenAIAgent;
-import org.zeusagents.agents.input.behaviours.cyclic.CyclicSenderInputBehaviourOpenAI;
+import org.zeusagents.agents.input.behaviours.cyclic.CyclicSenderInputBehaviour;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
@@ -33,7 +33,7 @@ public class ReceiverCore {
 
         if(inputMsg != null){
             this.deserializeMessage(inputMsg);
-            myAgent.addBehaviour(CyclicSenderInputBehaviourOpenAI.builder().inputAgent(myAgent).build());
+            myAgent.addBehaviour(CyclicSenderInputBehaviour.builder().inputAgent(myAgent).build());
         }
     }
 

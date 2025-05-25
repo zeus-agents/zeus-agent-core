@@ -10,7 +10,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import org.zeusagents.OutputClient.PrintOutputClient;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
-import org.zeusagents.agents.input.config.SimpleInputOpenAIConfig;
+import org.zeusagents.agents.input.config.SimpleInputConfig;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
@@ -34,7 +34,7 @@ public class SimpleMain {
             createMiddleAgent(mainContainer, "middleOpenAIAgent1");
             createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            SimpleInputOpenAIConfig inputOpenAIConfig = SimpleInputOpenAIConfig.builder()
+            SimpleInputConfig inputOpenAIConfig = SimpleInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)
                     .maxReceived(2)
                     .build();

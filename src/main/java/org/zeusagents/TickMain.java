@@ -11,7 +11,7 @@ import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import org.zeusagents.OutputClient.PrintOutputClient;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
-import org.zeusagents.agents.input.config.TickInputOpenAIConfig;
+import org.zeusagents.agents.input.config.TickInputConfig;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
@@ -36,7 +36,7 @@ public class TickMain {
             createMiddleAgent(mainContainer, "middleOpenAIAgent1");
             createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            TickInputOpenAIConfig inputOpenAIConfig = TickInputOpenAIConfig.builder()
+            TickInputConfig inputOpenAIConfig = TickInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI)
                     .periodReceiver(200)
                     .periodSender(1000)

@@ -6,12 +6,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TickInputOpenAIConfig extends InputOpenAIConfig{
+public class TickInputConfig extends InputConfig {
     private long periodReceiver;
     private long periodSender;
 
     @Builder
-    public TickInputOpenAIConfig(InputBehaviourTypes inputBehaviourTypes, long periodReceiver, long periodSender) {
+    public TickInputConfig(InputBehaviourTypes inputBehaviourTypes, long periodReceiver, long periodSender) {
         super(inputBehaviourTypes);
         this.periodReceiver=periodReceiver;
         this.periodSender=periodSender;

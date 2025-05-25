@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class InputOpenAIConfig {
+public abstract class InputConfig {
     protected InputBehaviourTypes inputBehaviourTypes;
 
-    public InputOpenAIConfig(InputBehaviourTypes inputBehaviourTypes) {
+    public InputConfig(InputBehaviourTypes inputBehaviourTypes) {
         this.inputBehaviourTypes = inputBehaviourTypes;
     }
 }

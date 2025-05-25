@@ -6,10 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CyclicInputOpenAIConfig extends InputOpenAIConfig {
+public class CyclicInputConfig extends InputConfig {
 
     @Builder
-    CyclicInputOpenAIConfig(InputBehaviourTypes inputBehaviourTypes) {
+    CyclicInputConfig(InputBehaviourTypes inputBehaviourTypes) {
         super(inputBehaviourTypes);
     }
 }

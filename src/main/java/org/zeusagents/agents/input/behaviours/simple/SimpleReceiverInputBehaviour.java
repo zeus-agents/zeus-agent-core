@@ -5,13 +5,13 @@ import jade.core.behaviours.SimpleBehaviour;
 import lombok.Builder;
 import org.zeusagents.agents.input.behaviours.ReceiverCore;
 
-public class SimpleReceiverInputBehaviourOpenAI extends SimpleBehaviour {
+public class SimpleReceiverInputBehaviour extends SimpleBehaviour {
     private int receivedCount = 0;
     private final int maxReceived;
     private final ReceiverCore receiverCore;
 
     @Builder
-    public SimpleReceiverInputBehaviourOpenAI(Agent inputAgent, int maxReceived) {
+    public SimpleReceiverInputBehaviour(Agent inputAgent, int maxReceived) {
         super(inputAgent);
         this.maxReceived = maxReceived;
         this.receiverCore = ReceiverCore.builder().myAgent(this.myAgent).build();

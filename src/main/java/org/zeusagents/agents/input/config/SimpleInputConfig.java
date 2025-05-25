@@ -6,11 +6,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SimpleInputOpenAIConfig extends InputOpenAIConfig{
+public class SimpleInputConfig extends InputConfig {
     private int maxReceived;
 
     @Builder
-    SimpleInputOpenAIConfig(InputBehaviourTypes inputBehaviourTypes, int maxReceived) {
+    SimpleInputConfig(InputBehaviourTypes inputBehaviourTypes, int maxReceived) {
         super(inputBehaviourTypes);
         this.maxReceived=maxReceived;
     }

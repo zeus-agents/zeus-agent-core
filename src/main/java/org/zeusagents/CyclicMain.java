@@ -10,7 +10,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import org.zeusagents.OutputClient.PrintOutputClient;
-import org.zeusagents.agents.input.config.CyclicInputOpenAIConfig;
+import org.zeusagents.agents.input.config.CyclicInputConfig;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.CyclicMiddleMainConfig;
@@ -22,9 +22,7 @@ import org.zeusagents.inputClient.InputACLMessageClient;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class CyclicMain {
     public static void main(String[] args) {
@@ -38,7 +36,7 @@ public class CyclicMain {
             createMiddleAgent(mainContainer, "middleOpenAIAgent1");
             createMiddleAgent(mainContainer, "middleOpenAIAgent2");
 
-            CyclicInputOpenAIConfig inputOpenAIConfig = CyclicInputOpenAIConfig.builder()
+            CyclicInputConfig inputOpenAIConfig = CyclicInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)
                     .build();
 
