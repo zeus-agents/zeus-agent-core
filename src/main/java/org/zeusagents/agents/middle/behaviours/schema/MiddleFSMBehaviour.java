@@ -6,11 +6,10 @@ import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
-import org.zeusagents.agents.middle.MiddleOpenAIAgent;
+import org.zeusagents.agents.middle.MiddleAgent;
 import org.zeusagents.agents.middle.behaviours.functionalities.MiddleBehaviourSelector;
 import org.zeusagents.agents.middle.config.DataStoreKeys;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
-import org.zeusagents.agents.middle.config.MiddleMainConfig;
 
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class MiddleFSMBehaviour extends TickerBehaviour {
     @Override
     public void onTick() {
 
-        MiddleOpenAIAgent midAgent = (MiddleOpenAIAgent) myAgent;
+        MiddleAgent midAgent = (MiddleAgent) myAgent;
 
         if (!midAgent.isFSMRunning() && !midAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage msg = midAgent.getMessageCacheQueue().poll();
@@ -43,28 +42,26 @@ public class MiddleFSMBehaviour extends TickerBehaviour {
                 ds.put(DataStoreKeys.INPUT_MESSAGE.name(), msg);
                 fsm.setDataStore(ds);
 
-                this.myAgent.addBehaviour(createFSMSequence(midAgent, fsm, ds, midAgent.getMiddleMainConfig()));
+                this.myAgent.addBehaviour(createFSMSequence(midAgent, fsm, ds));
                 midAgent.setFSMRunning(true);
             } else {
                 System.out.println("[Middle OpenAPI Agent " + myAgent.getName() + "] No message received, blocking");
             }
-
-            //myAgent.removeBehaviour(this);
         } else {
             block();
         }
 
     }
 
-    private FSMBehaviour createFSMSequence(MiddleOpenAIAgent midAgent, FSMBehaviour fsm, DataStore ds, MiddleMainConfig middleMainConfig) {
+    private FSMBehaviour createFSMSequence(MiddleAgent midAgent, FSMBehaviour fsm, DataStore ds) {
         int i = 0;
         String formerBehaviour = null;
 
-        for(Map.Entry<MiddleFuncBehaviourtype, Object> entry: middleMainConfig.getOrderBehaviourWithClient().entrySet()){
+        for(Map.Entry<MiddleFuncBehaviourtype, Object> entry: midAgent.getMiddleMainConfig().getOrderBehaviourWithClient().entrySet()){
 
             if(i > 0){
 
-                if(i >= middleMainConfig.getOrderBehaviourWithClient().size()-1){
+                if(i >= midAgent.getMiddleMainConfig().getOrderBehaviourWithClient().size()-1){
                     fsm.registerLastState(MiddleBehaviourSelector.selectMiddleBehaviour(midAgent, ds, entry.getKey(), entry.getValue()), entry.getKey().name()+i);
                 } else {
                     fsm.registerState(MiddleBehaviourSelector.selectMiddleBehaviour(midAgent, ds, entry.getKey(), entry.getValue()), entry.getKey().name()+i);

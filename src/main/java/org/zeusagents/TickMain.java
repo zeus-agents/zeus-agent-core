@@ -51,7 +51,7 @@ public class TickMain {
             inputObjects[0] = inputOpenAIConfig;
 
             AgentController inputOpenAIAgent = mainContainer.createNewAgent("inputOpenAIAgent",
-                    "org.zeusagents.agents.input.InputOpenAIAgent", inputObjects);
+                    "org.zeusagents.agents.input.InputAgent", inputObjects);
             inputOpenAIAgent.start();
 
             Thread.sleep(10000);
@@ -86,7 +86,7 @@ public class TickMain {
         middleObjects[0] = middleOpenAIConfig;
 
         AgentController middleOpenAIAgent = mainContainer.createNewAgent(nameAgent,
-                "org.zeusagents.agents.middle.MiddleOpenAIAgent", middleObjects);
+                "org.zeusagents.agents.middle.MiddleAgent", middleObjects);
         middleOpenAIAgent.start();
     }
 
@@ -107,7 +107,7 @@ public class TickMain {
         middleObjects[0] = middleOpenAIConfig;
 
         AgentController middleOpenAIAgent = mainContainer.createNewAgent(nameAgent,
-                "org.zeusagents.agents.middle.MiddleOpenAIAgent", middleObjects);
+                "org.zeusagents.agents.middle.MiddleAgent", middleObjects);
         middleOpenAIAgent.start();
     }
 

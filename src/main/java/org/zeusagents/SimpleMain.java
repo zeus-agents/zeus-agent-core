@@ -49,7 +49,7 @@ public class SimpleMain {
 
             AgentController inputOpenAIAgent = null;
             inputOpenAIAgent = mainContainer.createNewAgent("inputOpenAIAgent",
-                    "org.zeusagents.agents.input.InputOpenAIAgent", inputObjects);
+                    "org.zeusagents.agents.input.InputAgent", inputObjects);
             inputOpenAIAgent.start();
 
 
@@ -78,7 +78,7 @@ public class SimpleMain {
         middleObjects[0] = middleOpenAIConfig;
 
         AgentController middleOpenAIAgent = mainContainer.createNewAgent(nameAgent,
-                "org.zeusagents.agents.middle.MiddleOpenAIAgent", middleObjects);
+                "org.zeusagents.agents.middle.MiddleAgent", middleObjects);
         middleOpenAIAgent.start();
 
     }
@@ -100,7 +100,7 @@ public class SimpleMain {
         middleObjects[0] = middleOpenAIConfig;
 
         AgentController middleOpenAIAgent = mainContainer.createNewAgent(nameAgent,
-                "org.zeusagents.agents.middle.MiddleOpenAIAgent", middleObjects);
+                "org.zeusagents.agents.middle.MiddleAgent", middleObjects);
         middleOpenAIAgent.start();
 
     }

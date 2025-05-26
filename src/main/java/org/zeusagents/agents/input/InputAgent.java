@@ -13,7 +13,7 @@ import org.zeusagents.agents.input.config.*;
 import java.util.*;
 
 @Getter
-public class InputOpenAIAgent extends Agent {
+public class InputAgent extends Agent {
     private final Queue<ACLMessage> messageCacheQueue = new LinkedList<>();
     private InputConfig inputConfig;
 

@@ -4,7 +4,7 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.agents.input.InputOpenAIAgent;
+import org.zeusagents.agents.input.InputAgent;
 import org.zeusagents.agents.input.behaviours.cyclic.CyclicSenderInputBehaviour;
 
 import java.io.ByteArrayInputStream;
@@ -61,7 +61,7 @@ public class ReceiverCore {
 
             BasicMessageInputAgent data = (BasicMessageInputAgent) ois.readObject();
 
-            InputOpenAIAgent myInputAgent = (InputOpenAIAgent) myAgent;
+            InputAgent myInputAgent = (InputAgent) myAgent;
             myInputAgent.getMessageCacheQueue().add(inputMsg);
             System.out.println("[Input OpenAPI Agent] Save Ontology: "+inputMsg.getOntology()+", Agent: "+data.getMiddleAgentReceiver());
 

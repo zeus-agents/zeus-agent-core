@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 @Getter
-public class MiddleOpenAIAgent extends Agent {
+public class MiddleAgent extends Agent {
 
     private final Queue<ACLMessage> messageCacheQueue = new LinkedList<>();
     private MiddleMainConfig middleMainConfig;

@@ -5,8 +5,7 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import lombok.Builder;
-import org.zeusagents.agents.middle.MiddleOpenAIAgent;
-import org.zeusagents.agents.middle.behaviours.schema.MiddleFSMBehaviour;
+import org.zeusagents.agents.middle.MiddleAgent;
 
 
 public class CyclicMiddleMainBehaviour extends CyclicBehaviour {
@@ -23,9 +22,8 @@ public class CyclicMiddleMainBehaviour extends CyclicBehaviour {
         ACLMessage msg = this.myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
         if (msg != null) {
-            MiddleOpenAIAgent midAgent = (MiddleOpenAIAgent) this.myAgent;
+            MiddleAgent midAgent = (MiddleAgent) this.myAgent;
             midAgent.getMessageCacheQueue().add(msg);
-            //midAgent.addBehaviour(MiddleFSMBehaviour.builder().midAgent(this.myAgent).period(midAgent.getMiddleMainConfig().getFsmPeriod()).build());
         } else {
             System.out.println("[Middle OpenAPI Agent] No message received, blocking");
             block();

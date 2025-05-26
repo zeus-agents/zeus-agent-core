@@ -5,7 +5,7 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.agents.input.InputOpenAIAgent;
+import org.zeusagents.agents.input.InputAgent;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
@@ -13,7 +13,7 @@ import java.io.ObjectInputStream;
 @Builder
 public class SenderCore {
 
-    private InputOpenAIAgent myInputAgent;
+    private InputAgent myInputAgent;
 
     public void sendMessageCyclicBehaviour(Behaviour behaviour){ this.sendCyclicMessage(behaviour);}
     public int sendMessageSimpleBehaviour(Behaviour behaviour, int receivedCount){ return sendSimpleMessage(behaviour, receivedCount);}

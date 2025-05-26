@@ -5,13 +5,7 @@ import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import lombok.Builder;
-import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.AIClient.AIClient;
-import org.zeusagents.agents.middle.MiddleOpenAIAgent;
-import org.zeusagents.agents.middle.behaviours.schema.MiddleFSMBehaviour;
-
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
+import org.zeusagents.agents.middle.MiddleAgent;
 
 public class SimpleMiddleMainBehaviour extends SimpleBehaviour {
 
@@ -32,9 +26,8 @@ public class SimpleMiddleMainBehaviour extends SimpleBehaviour {
         ACLMessage msg = myAgent.blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
         if (msg != null) {
-            MiddleOpenAIAgent midAgent = (MiddleOpenAIAgent) this.myAgent;
+            MiddleAgent midAgent = (MiddleAgent) this.myAgent;
             midAgent.getMessageCacheQueue().add(msg);
-            //midAgent.addBehaviour(MiddleFSMBehaviour.builder().midAgent(this.myAgent).period(midAgent.getMiddleMainConfig().getFsmPeriod()).build());
             this.receivedCount++;
         } else {
             System.out.println("[Middle OpenAPI Agent] No message received, blocking");
