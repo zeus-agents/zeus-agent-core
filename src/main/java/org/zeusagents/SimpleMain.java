@@ -9,9 +9,11 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import org.zeusagents.OutputClient.PrintOutputClient;
+import org.zeusagents.OutputClient.SendToAgentOutputClient;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.SimpleInputConfig;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
+import org.zeusagents.agents.middle.config.CyclicMiddleMainConfig;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
 import org.zeusagents.agents.middle.config.SimpleMiddleMainConfig;
@@ -31,8 +33,11 @@ public class SimpleMain {
 
         AgentContainer mainContainer = rt.createMainContainer(profile);
         try {
-            createMiddleAgent(mainContainer, "middleOpenAIAgent1");
-            createMiddleAgent(mainContainer, "middleOpenAIAgent2");
+            createMiddleLastAgent(mainContainer, "lastOpenAIAgent1");
+            createMiddleLastAgent(mainContainer, "lastOpenAIAgent2");
+
+            createMiddleAgent(mainContainer, "middleOpenAIAgent1", "lastOpenAIAgent1");
+            createMiddleAgent(mainContainer, "middleOpenAIAgent2", "lastOpenAIAgent2");
 
             SimpleInputConfig inputOpenAIConfig = SimpleInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)
@@ -57,11 +62,32 @@ public class SimpleMain {
         }
     }
 
-    private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
+    private static void createMiddleLastAgent(AgentContainer mainContainer, String nameAgent) throws StaleProxyException {
         Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient = new LinkedHashMap<>(); //keep the insertion order
         orderBehaviourWithClient.put(MiddleFuncBehaviourtype.RECEIVER_BEHAVIOUR, new InputACLMessageClient());
         orderBehaviourWithClient.put(MiddleFuncBehaviourtype.GENERATOR_BEHAVIOUR, new TextGeneratorClient());
         orderBehaviourWithClient.put(MiddleFuncBehaviourtype.FINAL_BEHAVIOUR, new PrintOutputClient());
+
+        SimpleMiddleMainConfig middleOpenAIConfig = SimpleMiddleMainConfig.builder()
+                .middleMainBehaviourType(MiddleMainBehaviourType.SIMPLE)
+                .orderBehaviourWithClient(orderBehaviourWithClient)
+                .fsmPeriod(200)
+                .build();
+
+        Object[] middleObjects = new Object[1];
+        middleObjects[0] = middleOpenAIConfig;
+
+        AgentController middleOpenAIAgent = mainContainer.createNewAgent(nameAgent,
+                "org.zeusagents.agents.middle.MiddleOpenAIAgent", middleObjects);
+        middleOpenAIAgent.start();
+
+    }
+
+    private static void createMiddleAgent(AgentContainer mainContainer, String nameAgent,String nextNameAgent) throws StaleProxyException {
+        Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient = new LinkedHashMap<>(); //keep the insertion order
+        orderBehaviourWithClient.put(MiddleFuncBehaviourtype.RECEIVER_BEHAVIOUR, new InputACLMessageClient());
+        orderBehaviourWithClient.put(MiddleFuncBehaviourtype.GENERATOR_BEHAVIOUR, new TextGeneratorClient());
+        orderBehaviourWithClient.put(MiddleFuncBehaviourtype.FINAL_BEHAVIOUR, new SendToAgentOutputClient(nextNameAgent));
 
         SimpleMiddleMainConfig middleOpenAIConfig = SimpleMiddleMainConfig.builder()
                 .middleMainBehaviourType(MiddleMainBehaviourType.SIMPLE)

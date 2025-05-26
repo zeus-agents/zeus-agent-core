@@ -5,6 +5,7 @@ import jade.core.behaviours.DataStore;
 import jade.core.behaviours.OneShotBehaviour;
 import lombok.Builder;
 import org.zeusagents.OutputClient.OutputClient;
+import org.zeusagents.agents.middle.config.DataStoreKeys;
 
 public class FinalMiddleBehaviour extends OneShotBehaviour {
     private final OutputClient outputClient;
@@ -18,9 +19,9 @@ public class FinalMiddleBehaviour extends OneShotBehaviour {
 
     @Override
     public void action() {
-        String msg = (String) getDataStore().get("result");
-        //AID sender = (AID) getDataStore().get("sender");
+        String msg = (String) getDataStore().get(DataStoreKeys.OUTPUT_MESSAGE.name());
 
         this.outputClient.execute(msg, myAgent);
+        System.out.println("[FSM-FINAL " + myAgent.getName() + "] Transformed");
     }
 }

@@ -3,8 +3,10 @@ package org.zeusagents.agents.middle.behaviours.functionalities;
 import jade.core.Agent;
 import jade.core.behaviours.DataStore;
 import jade.core.behaviours.OneShotBehaviour;
+import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
+import org.zeusagents.agents.middle.config.DataStoreKeys;
 import org.zeusagents.inputClient.InputClient;
 
 public class ReceiverMiddleBehaviour extends OneShotBehaviour {
@@ -21,8 +23,7 @@ public class ReceiverMiddleBehaviour extends OneShotBehaviour {
     public void action() {
         BasicMessageInputAgent data = inputClient.execute(getDataStore());
 
-        getDataStore().put("content", data);
-        //getDataStore().put("sender", data.getSender());
+        getDataStore().put(DataStoreKeys.PROMPT.name(), data);
         System.out.println("[FSM-STORE " + myAgent.getName() + "] Stored message");
     }
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.zeusagents.agents.middle.behaviours.main.CyclicMiddleMainBehaviour;
 import org.zeusagents.agents.middle.behaviours.main.SimpleMiddleMainBehaviour;
 import org.zeusagents.agents.middle.behaviours.main.TickMiddleMainBehaviour;
+import org.zeusagents.agents.middle.behaviours.schema.MiddleFSMBehaviour;
 import org.zeusagents.agents.middle.config.*;
 
 import java.util.LinkedList;
@@ -39,16 +40,19 @@ public class MiddleOpenAIAgent extends Agent {
             if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.CYCLIC)){
                 CyclicMiddleMainConfig cyclicMiddleMainConfig = (CyclicMiddleMainConfig) middleMainConfig;
                 addBehaviour(CyclicMiddleMainBehaviour.builder().agent(this).build());
+                addBehaviour(MiddleFSMBehaviour.builder().midAgent(this).period(cyclicMiddleMainConfig.getFsmPeriod()).build());
             }
 
             if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.SIMPLE)){
                 SimpleMiddleMainConfig simpleMiddleOpenAIConfig = (SimpleMiddleMainConfig) middleMainConfig;
                 addBehaviour(SimpleMiddleMainBehaviour.builder().agent(this).maxReceived(simpleMiddleOpenAIConfig.getMaxReceived()).build());
+                addBehaviour(MiddleFSMBehaviour.builder().midAgent(this).period(simpleMiddleOpenAIConfig.getFsmPeriod()).build());
             }
 
             if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.TICK)){
                 TickMiddleMainConfig tickMiddleOpenAIConfig = (TickMiddleMainConfig) middleMainConfig;
                 addBehaviour(TickMiddleMainBehaviour.builder().agent(this).period(tickMiddleOpenAIConfig.getPeriod()).build());
+                addBehaviour(MiddleFSMBehaviour.builder().midAgent(this).period(tickMiddleOpenAIConfig.getFsmPeriod()).build());
         }
     }
 }

@@ -20,7 +20,7 @@ public class SenderCore {
     public void sendMessageTickBehaviour(Behaviour behaviour){this.sendTickMessage(behaviour);}
 
     private void sendCyclicMessage(Behaviour behaviour){
-        System.out.println("[Input OpenAPI Agent] Behavior executing. ");
+        System.out.println("[Input OpenAPI Agent] Cyclic Behavior executing. ");
 
         while (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
@@ -36,6 +36,7 @@ public class SenderCore {
     }
 
     private int sendSimpleMessage(Behaviour behaviour, int receivedCount){
+        System.out.println("[Input OpenAPI Agent] Simple Behavior executing. ");
         if (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
             String receiverAgent = deserializeMessage(inputMsg);
@@ -51,7 +52,7 @@ public class SenderCore {
     }
 
     private void sendTickMessage(Behaviour behaviour){
-
+        //System.out.println("[Input OpenAPI Agent] Tick Behavior executing. ");
         if (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
             String receiverAgent = deserializeMessage(inputMsg);

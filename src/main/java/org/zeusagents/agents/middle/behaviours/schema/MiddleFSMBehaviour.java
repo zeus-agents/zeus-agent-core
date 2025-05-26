@@ -8,6 +8,7 @@ import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.middle.MiddleOpenAIAgent;
 import org.zeusagents.agents.middle.behaviours.functionalities.MiddleBehaviourSelector;
+import org.zeusagents.agents.middle.config.DataStoreKeys;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainConfig;
 
@@ -33,13 +34,13 @@ public class MiddleFSMBehaviour extends TickerBehaviour {
                 FSMBehaviour fsm = new FSMBehaviour() {
                     public int onEnd() {
                         midAgent.setFSMRunning(false);
-                        System.out.println("[FSM] Finished handling: " + msg.getContent());
+                        System.out.println("[FSM "+ midAgent.getName() +"] Finished handling: " + msg.getContent());
                         return super.onEnd();
                     }
                 };
 
                 DataStore ds = new DataStore();
-                ds.put("first-msg", msg);
+                ds.put(DataStoreKeys.INPUT_MESSAGE.name(), msg);
                 fsm.setDataStore(ds);
 
                 this.myAgent.addBehaviour(createFSMSequence(midAgent, fsm, ds, midAgent.getMiddleMainConfig()));
@@ -48,7 +49,9 @@ public class MiddleFSMBehaviour extends TickerBehaviour {
                 System.out.println("[Middle OpenAPI Agent " + myAgent.getName() + "] No message received, blocking");
             }
 
-            myAgent.removeBehaviour(this);
+            //myAgent.removeBehaviour(this);
+        } else {
+            block();
         }
 
     }

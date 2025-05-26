@@ -6,12 +6,8 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.AIClient.AIClient;
 import org.zeusagents.agents.middle.MiddleOpenAIAgent;
 import org.zeusagents.agents.middle.behaviours.schema.MiddleFSMBehaviour;
-
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
 
 public class TickMiddleMainBehaviour extends TickerBehaviour {
 
@@ -31,9 +27,10 @@ public class TickMiddleMainBehaviour extends TickerBehaviour {
         if (msg != null) {
             MiddleOpenAIAgent midAgent = (MiddleOpenAIAgent) this.myAgent;
             midAgent.getMessageCacheQueue().add(msg);
-            midAgent.addBehaviour(MiddleFSMBehaviour.builder().midAgent(this.myAgent).period(midAgent.getMiddleMainConfig().getFsmPeriod()).build());
+            //midAgent.addBehaviour(MiddleFSMBehaviour.builder().midAgent(this.myAgent).period(midAgent.getMiddleMainConfig().getFsmPeriod()).build());
         } else {
             System.out.println("[Middle OpenAPI Agent] No message received, blocking");
+            block();
         }
     }
 }
