@@ -23,7 +23,6 @@ public class MiddleOpenAIAgent extends Agent {
     protected void setup() {
         System.out.println("[Middle OpenAPI Agent] ReceiverAgent " + getAID().getName() + " is ready");
 
-
             this.setQueueSize(10);
             final Object[] args = getArguments();
 

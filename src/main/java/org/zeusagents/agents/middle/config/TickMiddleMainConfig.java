@@ -14,8 +14,8 @@ public class TickMiddleMainConfig extends MiddleMainConfig {
     private long period;
 
     @Builder
-    public TickMiddleMainConfig(MiddleMainBehaviourType middleMainBehaviourType, Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient, long period) {
-        super(middleMainBehaviourType, orderBehaviourWithClient);
+    public TickMiddleMainConfig(MiddleMainBehaviourType middleMainBehaviourType, Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient, long period, long fsmPeriod) {
+        super(middleMainBehaviourType, orderBehaviourWithClient, fsmPeriod);
         this.period=period;
     }
 }

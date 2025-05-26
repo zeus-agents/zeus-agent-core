@@ -15,9 +15,11 @@ import java.util.Objects;
 public abstract class MiddleMainConfig {
     MiddleMainBehaviourType middleMainBehaviourType;
     private Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient;
+    private long fsmPeriod;
 
-    public MiddleMainConfig(MiddleMainBehaviourType middleMainBehaviourType, Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient) {
+    public MiddleMainConfig(MiddleMainBehaviourType middleMainBehaviourType, Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient, long fsmPeriod) {
         this.middleMainBehaviourType = middleMainBehaviourType;
         this.orderBehaviourWithClient = orderBehaviourWithClient;
+        this.fsmPeriod=fsmPeriod;
     }
 }

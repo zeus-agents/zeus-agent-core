@@ -67,6 +67,7 @@ public class SimpleMain {
                 .middleMainBehaviourType(MiddleMainBehaviourType.SIMPLE)
                 .orderBehaviourWithClient(orderBehaviourWithClient)
                 .maxReceived(1)
+                .fsmPeriod(200)
                 .build();
 
         Object[] middleObjects = new Object[1];

@@ -74,6 +74,7 @@ public class TickMain {
                 .middleMainBehaviourType(MiddleMainBehaviourType.TICK)
                 .orderBehaviourWithClient(orderBehaviourWithClient)
                 .period(200)
+                .fsmPeriod(200)
                 .build();
 
         Object[] middleObjects = new Object[1];

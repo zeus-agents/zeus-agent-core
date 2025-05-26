@@ -74,6 +74,7 @@ public class CyclicMain {
         CyclicMiddleMainConfig middleOpenAIConfig = CyclicMiddleMainConfig.builder()
                 .middleMainBehaviourType(MiddleMainBehaviourType.CYCLIC)
                 .orderBehaviourWithClient(orderBehaviourWithClient)
+                .fsmPeriod(200)
                 .build();
 
         Object[] middleObjects = new Object[1];

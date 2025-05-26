@@ -17,8 +17,8 @@ public class MiddleFSMBehaviour extends TickerBehaviour {
 
 
     @Builder
-    public MiddleFSMBehaviour(Agent midAgent) {
-        super(midAgent, 200);
+    public MiddleFSMBehaviour(Agent midAgent, long period) {
+        super(midAgent, period);
     }
 
     @Override

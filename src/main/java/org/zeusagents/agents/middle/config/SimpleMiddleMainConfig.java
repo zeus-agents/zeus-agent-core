@@ -14,8 +14,8 @@ public class SimpleMiddleMainConfig extends MiddleMainConfig {
     private int maxReceived;
 
     @Builder
-    public SimpleMiddleMainConfig(MiddleMainBehaviourType middleMainBehaviourType, Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient, int maxReceived) {
-        super(middleMainBehaviourType, orderBehaviourWithClient);
+    public SimpleMiddleMainConfig(MiddleMainBehaviourType middleMainBehaviourType, Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient, int maxReceived, long fsmPeriod) {
+        super(middleMainBehaviourType, orderBehaviourWithClient, fsmPeriod);
         this.maxReceived = maxReceived;
     }
 }

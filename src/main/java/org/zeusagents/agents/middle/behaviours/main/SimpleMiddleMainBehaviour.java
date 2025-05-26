@@ -34,7 +34,7 @@ public class SimpleMiddleMainBehaviour extends SimpleBehaviour {
         if (msg != null) {
             MiddleOpenAIAgent midAgent = (MiddleOpenAIAgent) this.myAgent;
             midAgent.getMessageCacheQueue().add(msg);
-            midAgent.addBehaviour(MiddleFSMBehaviour.builder().midAgent(this.myAgent).build());
+            midAgent.addBehaviour(MiddleFSMBehaviour.builder().midAgent(this.myAgent).period(midAgent.getMiddleMainConfig().getFsmPeriod()).build());
             this.receivedCount++;
         } else {
             System.out.println("[Middle OpenAPI Agent] No message received, blocking");
