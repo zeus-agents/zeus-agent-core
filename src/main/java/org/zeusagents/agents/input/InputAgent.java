@@ -9,6 +9,9 @@ import org.zeusagents.agents.input.behaviours.simple.SimpleSenderInputBehaviour;
 import org.zeusagents.agents.input.behaviours.tick.TickReceiverInputBehaviour;
 import org.zeusagents.agents.input.behaviours.tick.TickSenderInputBehaviour;
 import org.zeusagents.agents.input.config.*;
+import org.zeusagents.agents.input.loadBalance.LoadBalance;
+import org.zeusagents.agents.input.loadBalance.LoadBalanceType;
+import org.zeusagents.agents.input.loadBalance.LoadBalancerSelect;
 
 import java.util.*;
 
@@ -16,6 +19,7 @@ import java.util.*;
 public class InputAgent extends Agent {
     private final Queue<ACLMessage> messageCacheQueue = new LinkedList<>();
     private InputConfig inputConfig;
+    private LoadBalance loadBalance;
 
     protected void setup() {
         System.out.println("[Input OpenAPI Agent] ReceiverAgent " + getAID().getName() + " is ready");
@@ -25,6 +29,8 @@ public class InputAgent extends Agent {
             inputConfig = (InputConfig) args[0];
             //This accept data external from the JDE system
             setEnabledO2ACommunication(true, 10);
+
+            this.loadBalance = LoadBalancerSelect.selectLoadBalancer(this.inputConfig.getLoadBalanceType(), this.inputConfig.getLoadBalancerAgentList());
 
             selectBehaviour();
             System.out.println("[Input OpenAPI Agent] SETUP COMPLETE");

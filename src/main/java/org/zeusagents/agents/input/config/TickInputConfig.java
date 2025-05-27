@@ -3,6 +3,9 @@ package org.zeusagents.agents.input.config;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.zeusagents.agents.input.loadBalance.LoadBalanceType;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,8 +14,8 @@ public class TickInputConfig extends InputConfig {
     private long periodSender;
 
     @Builder
-    public TickInputConfig(InputBehaviourTypes inputBehaviourTypes, long periodReceiver, long periodSender) {
-        super(inputBehaviourTypes);
+    TickInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, List<String> loadBalancerAgentList, long periodReceiver, long periodSender) {
+        super(inputBehaviourTypes, loadBalanceType, loadBalancerAgentList);
         this.periodReceiver=periodReceiver;
         this.periodSender=periodSender;
     }

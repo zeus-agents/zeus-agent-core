@@ -24,10 +24,17 @@ public class SenderCore {
 
         while (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
-            String receiverAgent = deserializeMessage(inputMsg);
 
-            if (inputMsg != null && receiverAgent != null) {
-                redirectMessage(inputMsg, receiverAgent);
+            if (inputMsg != null ) {
+                if(myInputAgent.getLoadBalance() == null ){
+                    String receiverAgent = deserializeMessage(inputMsg);
+                    if(receiverAgent != null){
+                        redirectMessage(inputMsg, receiverAgent);
+                    }
+                } else {
+                    redirectMessage(inputMsg, myInputAgent.getLoadBalance().getAgent());
+                }
+
             } else {
                 System.out.println("[Input OpenAPI Agent] No message received, blocking");
             }
@@ -39,12 +46,21 @@ public class SenderCore {
         System.out.println("[Input OpenAPI Agent] Simple Behavior executing. ");
         if (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
-            String receiverAgent = deserializeMessage(inputMsg);
 
-            if (inputMsg != null && receiverAgent != null) {
-                redirectMessage(inputMsg, receiverAgent);
+            if (inputMsg != null ) {
+                if(myInputAgent.getLoadBalance() == null ){
+                    String receiverAgent = deserializeMessage(inputMsg);
+                    if(receiverAgent != null){
+                        redirectMessage(inputMsg, receiverAgent);
+                    }
+                } else {
+                    redirectMessage(inputMsg, myInputAgent.getLoadBalance().getAgent());
+                }
                 receivedCount++;
+            } else {
+                System.out.println("[Input OpenAPI Agent] No message received, blocking");
             }
+
         } else {
             behaviour.block();
         }
@@ -55,11 +71,21 @@ public class SenderCore {
         //System.out.println("[Input OpenAPI Agent] Tick Behavior executing. ");
         if (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
-            String receiverAgent = deserializeMessage(inputMsg);
 
-            if (inputMsg != null && receiverAgent != null) {
-                redirectMessage(inputMsg, receiverAgent);
+            if (inputMsg != null ) {
+                if(myInputAgent.getLoadBalance() == null ){
+                    String receiverAgent = deserializeMessage(inputMsg);
+                    if(receiverAgent != null){
+                        redirectMessage(inputMsg, receiverAgent);
+                    }
+                } else {
+                    redirectMessage(inputMsg, myInputAgent.getLoadBalance().getAgent());
+                }
+
+            } else {
+                System.out.println("[Input OpenAPI Agent] No message received, blocking");
             }
+
         } else {
             behaviour.block();
         }

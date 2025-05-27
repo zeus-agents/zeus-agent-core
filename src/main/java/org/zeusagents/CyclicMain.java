@@ -14,6 +14,7 @@ import org.zeusagents.OutputClient.SendToAgentOutputClient;
 import org.zeusagents.agents.input.config.CyclicInputConfig;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
+import org.zeusagents.agents.input.loadBalance.LoadBalanceType;
 import org.zeusagents.agents.middle.config.CyclicMiddleMainConfig;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
@@ -42,6 +43,7 @@ public class CyclicMain {
 
             CyclicInputConfig inputOpenAIConfig = CyclicInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)
+                    .loadBalanceType(LoadBalanceType.NO_LOAD_BALANCER)
                     .build();
 
             Object[] inputObjects = new Object[1];

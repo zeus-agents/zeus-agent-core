@@ -14,6 +14,7 @@ import org.zeusagents.OutputClient.SendToAgentOutputClient;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.TickInputConfig;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
+import org.zeusagents.agents.input.loadBalance.LoadBalanceType;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
 import org.zeusagents.agents.middle.config.SimpleMiddleMainConfig;
@@ -38,13 +39,17 @@ public class TickMain {
             createMiddleLastAgent(mainContainer, "lastOpenAIAgent1");
             createMiddleLastAgent(mainContainer, "lastOpenAIAgent2");
 
-            createMiddleAgent(mainContainer, "middleOpenAIAgent1", "lastOpenAIAgent1");
-            createMiddleAgent(mainContainer, "middleOpenAIAgent2", "lastOpenAIAgent2");
+            createMiddleAgent(mainContainer, "middle1OpenAIAgent1", "lastOpenAIAgent1");
+            createMiddleAgent(mainContainer, "middle2OpenAIAgent2", "lastOpenAIAgent2");
+
+            createMiddleAgent(mainContainer, "middleOpenAIAgent1", "middle1OpenAIAgent1");
+            createMiddleAgent(mainContainer, "middleOpenAIAgent2", "middle2OpenAIAgent2");
 
             TickInputConfig inputOpenAIConfig = TickInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI)
+                    .loadBalanceType(LoadBalanceType.NO_LOAD_BALANCER)
                     .periodReceiver(200)
-                    .periodSender(1000)
+                    .periodSender(100)
                     .build();
 
             Object[] inputObjects = new Object[1];
@@ -54,7 +59,7 @@ public class TickMain {
                     "org.zeusagents.agents.input.InputAgent", inputObjects);
             inputOpenAIAgent.start();
 
-            Thread.sleep(10000);
+            Thread.sleep(1000);
             sendMessage( inputOpenAIAgent, "middleOpenAIAgent1","CONFIG", "mode=production;timeout=5000");
             sendMessage( inputOpenAIAgent,"middleOpenAIAgent1", "DATA1", "{sensor:temp,value:23.5}");
             sendMessage( inputOpenAIAgent,"middleOpenAIAgent2", "DATA2", "{sensor:temp,value:23.5}");

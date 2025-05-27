@@ -7,7 +7,6 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.middle.MiddleAgent;
-import org.zeusagents.agents.middle.behaviours.functionalities.MiddleBehaviourSelector;
 import org.zeusagents.agents.middle.config.DataStoreKeys;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 
