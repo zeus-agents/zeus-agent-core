@@ -11,6 +11,7 @@ import jade.wrapper.StaleProxyException;
 import org.zeusagents.AIClient.TextGeneratorClient;
 import org.zeusagents.OutputClient.PrintOutputClient;
 import org.zeusagents.OutputClient.SendToAgentOutputClient;
+import org.zeusagents.agents.AgentsClass;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.SimpleInputConfig;
@@ -34,35 +35,38 @@ public class SimpleMainLB {
 
         AgentContainer mainContainer = rt.createMainContainer(profile);
         try {
-            createMiddleLastAgent(mainContainer, "lastOpenAIAgent1");
-            createMiddleLastAgent(mainContainer, "lastOpenAIAgent2");
+            createMiddleLastAgent(mainContainer, "lastTestAgent1");
+            createMiddleLastAgent(mainContainer, "lastTestAgent2");
 
-            createMiddleAgent(mainContainer, "middleOpenAIAgent1", "lastOpenAIAgent1");
-            createMiddleAgent(mainContainer, "middleOpenAIAgent2", "lastOpenAIAgent2");
+            createMiddleAgent(mainContainer, "middle1TestAgent1", "lastTestAgent1");
+            createMiddleAgent(mainContainer, "middle2TestAgent2", "lastTestAgent2");
+
+            createMiddleAgent(mainContainer, "middleTestAgent1", "middle1TestAgent1");
+            createMiddleAgent(mainContainer, "middleTestAgent2", "middle2TestAgent2");
 
             LinkedList<String> loadBalancerAgentList = new LinkedList<>();
-            loadBalancerAgentList.add("middleOpenAIAgent1");
-            loadBalancerAgentList.add("middleOpenAIAgent2");
+            loadBalancerAgentList.add("middleTestAgent1");
+            loadBalancerAgentList.add("middleTestAgent2");
 
-            SimpleInputConfig inputOpenAIConfig = SimpleInputConfig.builder()
-                    .inputBehaviourTypes(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)
+            SimpleInputConfig inputConfig = SimpleInputConfig.builder()
+                    .inputBehaviourTypes(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR)
                     .loadBalanceType(LoadBalanceType.ROUND_ROBIN)
                     .loadBalancerAgentList(loadBalancerAgentList)
                     .maxReceived(2)
                     .build();
 
             Object[] inputObjects = new Object[1];
-            inputObjects[0] = inputOpenAIConfig;
+            inputObjects[0] = inputConfig;
 
-            AgentController inputOpenAIAgent = null;
-            inputOpenAIAgent = mainContainer.createNewAgent("inputOpenAIAgent",
-                    "org.zeusagents.agents.input.InputAgent", inputObjects);
-            inputOpenAIAgent.start();
+            AgentController inputAgent = null;
+            inputAgent = mainContainer.createNewAgent("inputTestAgent",
+                    AgentsClass.INPUT_AGENT, inputObjects);
+            inputAgent.start();
 
 
             Thread.sleep(10000);
-            sendMessage(inputOpenAIAgent,  "CONFIG", "mode=production;timeout=5001");
-            sendMessage(inputOpenAIAgent,  "CONFIG", "mode=production;timeout=5002");
+            sendMessage(inputAgent,  "CONFIG", "mode=production;timeout=5001");
+            sendMessage(inputAgent,  "CONFIG", "mode=production;timeout=5002");
 
         } catch (StaleProxyException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -75,18 +79,18 @@ public class SimpleMainLB {
         orderBehaviourWithClient.put(MiddleFuncBehaviourtype.GENERATOR_BEHAVIOUR, new TextGeneratorClient());
         orderBehaviourWithClient.put(MiddleFuncBehaviourtype.FINAL_BEHAVIOUR, new PrintOutputClient());
 
-        SimpleMiddleMainConfig middleOpenAIConfig = SimpleMiddleMainConfig.builder()
+        SimpleMiddleMainConfig middleConfig = SimpleMiddleMainConfig.builder()
                 .middleMainBehaviourType(MiddleMainBehaviourType.SIMPLE)
                 .orderBehaviourWithClient(orderBehaviourWithClient)
                 .fsmPeriod(200)
                 .build();
 
         Object[] middleObjects = new Object[1];
-        middleObjects[0] = middleOpenAIConfig;
+        middleObjects[0] = middleConfig;
 
-        AgentController middleOpenAIAgent = mainContainer.createNewAgent(nameAgent,
-                "org.zeusagents.agents.middle.MiddleAgent", middleObjects);
-        middleOpenAIAgent.start();
+        AgentController middleAgent = mainContainer.createNewAgent(nameAgent,
+                AgentsClass.MIDDLE_AGENT, middleObjects);
+        middleAgent.start();
 
     }
 
@@ -96,7 +100,7 @@ public class SimpleMainLB {
         orderBehaviourWithClient.put(MiddleFuncBehaviourtype.GENERATOR_BEHAVIOUR, new TextGeneratorClient());
         orderBehaviourWithClient.put(MiddleFuncBehaviourtype.FINAL_BEHAVIOUR, new SendToAgentOutputClient(nextNameAgent));
 
-        SimpleMiddleMainConfig middleOpenAIConfig = SimpleMiddleMainConfig.builder()
+        SimpleMiddleMainConfig middleConfig = SimpleMiddleMainConfig.builder()
                 .middleMainBehaviourType(MiddleMainBehaviourType.SIMPLE)
                 .orderBehaviourWithClient(orderBehaviourWithClient)
                 .maxReceived(1)
@@ -104,18 +108,18 @@ public class SimpleMainLB {
                 .build();
 
         Object[] middleObjects = new Object[1];
-        middleObjects[0] = middleOpenAIConfig;
+        middleObjects[0] = middleConfig;
 
-        AgentController middleOpenAIAgent = mainContainer.createNewAgent(nameAgent,
-                "org.zeusagents.agents.middle.MiddleAgent", middleObjects);
-        middleOpenAIAgent.start();
+        AgentController middleAgent = mainContainer.createNewAgent(nameAgent,
+                AgentsClass.MIDDLE_AGENT, middleObjects);
+        middleAgent.start();
 
     }
 
-    private static void sendMessage(AgentController inputOpenAIAgent, String type, String content) {
+    private static void sendMessage(AgentController inputAgent, String type, String content) {
         try {
             ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-            msg.addReceiver(new AID(inputOpenAIAgent.getName(), AID.ISLOCALNAME));
+            msg.addReceiver(new AID(inputAgent.getName(), AID.ISLOCALNAME));
             msg.setEncoding("JADE-Encoding");
             msg.setLanguage("English");
             msg.setOntology(type);  // Using ontology as message type
@@ -129,10 +133,10 @@ public class SimpleMainLB {
                 msg.setByteSequenceContent(bos.toByteArray());
             }
 
-            System.out.println("[Main] Sending message - To: "+inputOpenAIAgent.getName()+", Type: " + type +
+            System.out.println("[Main] Sending message - To: "+inputAgent.getName()+", Type: " + type +
                     ", Content: " + content);
 
-            inputOpenAIAgent.putO2AObject(msg, true); // false means asynchronous
+            inputAgent.putO2AObject(msg, true); // false means asynchronous
         } catch (Exception e) {
             e.printStackTrace();
         }

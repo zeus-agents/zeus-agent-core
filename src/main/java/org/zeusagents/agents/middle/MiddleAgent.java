@@ -44,15 +44,15 @@ public class MiddleAgent extends Agent {
             }
 
             if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.SIMPLE)){
-                SimpleMiddleMainConfig simpleMiddleOpenAIConfig = (SimpleMiddleMainConfig) middleMainConfig;
-                addBehaviour(SimpleMiddleMainBehaviour.builder().agent(this).maxReceived(simpleMiddleOpenAIConfig.getMaxReceived()).build());
-                addBehaviour(MiddleFSMBehaviour.builder().midAgent(this).period(simpleMiddleOpenAIConfig.getFsmPeriod()).build());
+                SimpleMiddleMainConfig simpleMiddleConfig = (SimpleMiddleMainConfig) middleMainConfig;
+                addBehaviour(SimpleMiddleMainBehaviour.builder().agent(this).maxReceived(simpleMiddleConfig.getMaxReceived()).build());
+                addBehaviour(MiddleFSMBehaviour.builder().midAgent(this).period(simpleMiddleConfig.getFsmPeriod()).build());
             }
 
             if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.TICK)){
-                TickMiddleMainConfig tickMiddleOpenAIConfig = (TickMiddleMainConfig) middleMainConfig;
-                addBehaviour(TickMiddleMainBehaviour.builder().agent(this).period(tickMiddleOpenAIConfig.getPeriod()).build());
-                addBehaviour(MiddleFSMBehaviour.builder().midAgent(this).period(tickMiddleOpenAIConfig.getFsmPeriod()).build());
+                TickMiddleMainConfig tickMiddleConfig = (TickMiddleMainConfig) middleMainConfig;
+                addBehaviour(TickMiddleMainBehaviour.builder().agent(this).period(tickMiddleConfig.getPeriod()).build());
+                addBehaviour(MiddleFSMBehaviour.builder().midAgent(this).period(tickMiddleConfig.getFsmPeriod()).build());
         }
     }
 }

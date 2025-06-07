@@ -1,7 +1,7 @@
 package org.zeusagents.agents.input.config;
 
 public enum InputBehaviourTypes {
-    CYCLIC_INPUT_BEHAVIOUR_OPENAI,
-    SIMPLE_INPUT_BEHAVIOUR_OPENAI,
-    TICK_INPUT_BEHAVIOUR_OPENAI
+    CYCLIC_INPUT_BEHAVIOUR,
+    SIMPLE_INPUT_BEHAVIOUR,
+    TICK_INPUT_BEHAVIOUR
 }

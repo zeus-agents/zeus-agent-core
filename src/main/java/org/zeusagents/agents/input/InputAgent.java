@@ -42,22 +42,22 @@ public class InputAgent extends Agent {
     }
 
     private void selectBehaviour(){
-        if(inputConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR_OPENAI)){
+        if(inputConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR)){
             //In this case the Cyclic Sender is created by the Receiver to upgrade the CPU performance.
             CyclicInputConfig cyclicInputConfig = (CyclicInputConfig) inputConfig;
             addBehaviour(CyclicReceiverInputBehaviour.builder().inputAgent(this).build());
         }
 
-        if(inputConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR_OPENAI)){
-            SimpleInputConfig simpleInputOpenAIConfig = (SimpleInputConfig) inputConfig;
-            addBehaviour(SimpleReceiverInputBehaviour.builder().inputAgent(this).maxReceived(simpleInputOpenAIConfig.getMaxReceived()).build());
-            addBehaviour(SimpleSenderInputBehaviour.builder().inputAgent(this).maxReceived(simpleInputOpenAIConfig.getMaxReceived()).build());
+        if(inputConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR)){
+            SimpleInputConfig simpleInputConfig = (SimpleInputConfig) inputConfig;
+            addBehaviour(SimpleReceiverInputBehaviour.builder().inputAgent(this).maxReceived(simpleInputConfig.getMaxReceived()).build());
+            addBehaviour(SimpleSenderInputBehaviour.builder().inputAgent(this).maxReceived(simpleInputConfig.getMaxReceived()).build());
         }
 
-        if(inputConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.TICK_INPUT_BEHAVIOUR_OPENAI)){
-            TickInputConfig tickInputOpenAIConfig = (TickInputConfig) inputConfig;
-            addBehaviour(TickReceiverInputBehaviour.builder().inputAgent(this).period(tickInputOpenAIConfig.getPeriodReceiver()).build());
-            addBehaviour(TickSenderInputBehaviour.builder().inputAgent(this).period(tickInputOpenAIConfig.getPeriodSender()).build());
+        if(inputConfig.getInputBehaviourTypes().equals(InputBehaviourTypes.TICK_INPUT_BEHAVIOUR)){
+            TickInputConfig tickInputConfig = (TickInputConfig) inputConfig;
+            addBehaviour(TickReceiverInputBehaviour.builder().inputAgent(this).period(tickInputConfig.getPeriodReceiver()).build());
+            addBehaviour(TickSenderInputBehaviour.builder().inputAgent(this).period(tickInputConfig.getPeriodSender()).build());
         }
     }
 }
