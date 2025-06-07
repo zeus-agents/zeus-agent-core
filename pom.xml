@@ -16,11 +16,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.openai</groupId>
-            <artifactId>openai-java</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
             <groupId>com.tilab.jade</groupId>
             <artifactId>jade</artifactId>
             <version>4.5.0</version>

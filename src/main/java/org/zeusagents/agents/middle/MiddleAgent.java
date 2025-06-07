@@ -29,14 +29,14 @@ public class MiddleAgent extends Agent {
 
             if(null != args){
                 middleMainConfig = (MiddleMainConfig) args[0];
-                activateBehaviours();
+                selectBehaviours();
                 System.out.println("[Middle OpenAPI Agent] SETUP COMPLETE");
             } else {
                 System.out.println("[Middle OpenAPI Agent] SETUP ERROR!");
             }
         }
 
-        private void activateBehaviours(){
+        private void selectBehaviours(){
             if(middleMainConfig.getMiddleMainBehaviourType().equals(MiddleMainBehaviourType.CYCLIC)){
                 CyclicMiddleMainConfig cyclicMiddleMainConfig = (CyclicMiddleMainConfig) middleMainConfig;
                 addBehaviour(CyclicMiddleMainBehaviour.builder().agent(this).build());
