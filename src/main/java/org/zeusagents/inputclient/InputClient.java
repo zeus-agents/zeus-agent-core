@@ -1,4 +1,4 @@
-package org.zeusagents.inputClient;
+package org.zeusagents.inputclient;
 
 import jade.core.behaviours.DataStore;
 import org.zeusagents.agents.data.BasicMessageInputAgent;

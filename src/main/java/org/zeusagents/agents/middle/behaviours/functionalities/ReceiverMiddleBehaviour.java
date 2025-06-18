@@ -3,11 +3,10 @@ package org.zeusagents.agents.middle.behaviours.functionalities;
 import jade.core.Agent;
 import jade.core.behaviours.DataStore;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.lang.acl.ACLMessage;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.middle.config.DataStoreKeys;
-import org.zeusagents.inputClient.InputClient;
+import org.zeusagents.inputclient.InputClient;
 
 public class ReceiverMiddleBehaviour extends OneShotBehaviour {
     private final InputClient inputClient;

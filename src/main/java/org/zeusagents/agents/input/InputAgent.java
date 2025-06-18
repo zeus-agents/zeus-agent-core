@@ -2,8 +2,13 @@ package org.zeusagents.agents.input;
 
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.proto.SubscriptionResponder;
 import lombok.Getter;
 import org.zeusagents.agents.input.behaviours.cyclic.CyclicReceiverInputBehaviour;
+import org.zeusagents.agents.input.behaviours.monitor.PublisherStatsBehaviour;
+import org.zeusagents.agents.input.behaviours.monitor.SubscriptionResponderBehaviour;
+import org.zeusagents.agents.input.behaviours.monitor.manager.SubscriptionMonitorManager;
 import org.zeusagents.agents.input.behaviours.simple.SimpleReceiverInputBehaviour;
 import org.zeusagents.agents.input.behaviours.simple.SimpleSenderInputBehaviour;
 import org.zeusagents.agents.input.behaviours.tick.TickReceiverInputBehaviour;
@@ -20,6 +25,7 @@ public class InputAgent extends Agent {
     private final Queue<ACLMessage> messageCacheQueue = new LinkedList<>();
     private InputConfig inputConfig;
     private LoadBalance loadBalance;
+    private SubscriptionResponderBehaviour subMonitorResponder;
 
     protected void setup() {
         System.out.println("[Input OpenAPI Agent] ReceiverAgent " + getAID().getName() + " is ready");
@@ -30,15 +36,15 @@ public class InputAgent extends Agent {
             //This accept data external from the JDE system
             setEnabledO2ACommunication(true, 10);
 
-            this.loadBalance = LoadBalancerSelect.selectLoadBalancer(this.inputConfig.getLoadBalanceType(), this.inputConfig.getLoadBalancerAgentList());
+            this.loadBalance = LoadBalancerSelect.selectLoadBalancer(this.inputConfig.getLoadBalanceType());
 
             selectBehaviour();
+
+            createSubscriberResponder();
             System.out.println("[Input OpenAPI Agent] SETUP COMPLETE");
         } else{
             System.out.println("[Input OpenAPI Agent] SETUP ERROR!");
         }
-
-
     }
 
     private void selectBehaviour(){
@@ -59,5 +65,15 @@ public class InputAgent extends Agent {
             addBehaviour(TickReceiverInputBehaviour.builder().inputAgent(this).period(tickInputConfig.getPeriodReceiver()).build());
             addBehaviour(TickSenderInputBehaviour.builder().inputAgent(this).period(tickInputConfig.getPeriodSender()).build());
         }
+    }
+
+    private void createSubscriberResponder(){
+        MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE);
+        SubscriptionMonitorManager subscriptionMonitorManager = new SubscriptionMonitorManager();
+
+        subMonitorResponder = new SubscriptionResponderBehaviour(this, mt, subscriptionMonitorManager);
+
+        addBehaviour(subMonitorResponder);
+        addBehaviour(PublisherStatsBehaviour.builder().a(this).period(5000).build());
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public class CyclicInputConfig extends InputConfig {
 
     @Builder
-    CyclicInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, List<String> loadBalancerAgentList) {
-        super(inputBehaviourTypes, loadBalanceType, loadBalancerAgentList);
+    CyclicInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, boolean management) {
+        super(inputBehaviourTypes, loadBalanceType, management);
     }
 }

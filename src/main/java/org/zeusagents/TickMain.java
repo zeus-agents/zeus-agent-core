@@ -9,8 +9,8 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
-import org.zeusagents.OutputClient.PrintOutputClient;
-import org.zeusagents.OutputClient.SendToAgentOutputClient;
+import org.zeusagents.outputclient.PrintOutputClient;
+import org.zeusagents.outputclient.SendToAgentOutputClient;
 import org.zeusagents.agents.AgentsClass;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
 import org.zeusagents.agents.input.config.TickInputConfig;
@@ -18,10 +18,9 @@ import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.input.loadBalance.LoadBalanceType;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
-import org.zeusagents.agents.middle.config.SimpleMiddleMainConfig;
 import org.zeusagents.agents.middle.config.TickMiddleMainConfig;
-import org.zeusagents.AIClient.TextGeneratorClient;
-import org.zeusagents.inputClient.InputACLMessageClient;
+import org.zeusagents.aiclient.TextGeneratorClient;
+import org.zeusagents.inputclient.InputACLMessageClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
@@ -113,7 +112,7 @@ public class TickMain {
         middleObjects[0] = middleConfig;
 
         AgentController middleAgent = mainContainer.createNewAgent(nameAgent,
-                "org.zeusagents.agents.middle.MiddleAgent", middleObjects);
+                AgentsClass.MIDDLE_AGENT, middleObjects);
         middleAgent.start();
     }
 

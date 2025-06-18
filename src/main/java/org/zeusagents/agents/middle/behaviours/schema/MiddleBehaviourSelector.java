@@ -2,14 +2,14 @@ package org.zeusagents.agents.middle.behaviours.schema;
 
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.DataStore;
-import org.zeusagents.AIClient.AIClient;
-import org.zeusagents.OutputClient.OutputClient;
+import org.zeusagents.aiclient.AIClient;
+import org.zeusagents.outputclient.OutputClient;
 import org.zeusagents.agents.middle.MiddleAgent;
 import org.zeusagents.agents.middle.behaviours.functionalities.FinalMiddleBehaviour;
 import org.zeusagents.agents.middle.behaviours.functionalities.GeneratorMiddleBehaviour;
 import org.zeusagents.agents.middle.behaviours.functionalities.ReceiverMiddleBehaviour;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
-import org.zeusagents.inputClient.InputClient;
+import org.zeusagents.inputclient.InputClient;
 
 public class MiddleBehaviourSelector {
 

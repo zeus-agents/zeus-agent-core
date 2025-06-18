@@ -12,7 +12,7 @@ import java.util.Objects;
 public class CyclicMiddleMainConfig extends MiddleMainConfig {
 
     @Builder
-    public CyclicMiddleMainConfig(MiddleMainBehaviourType middleMainBehaviourType, Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient, long fsmPeriod) {
-        super(middleMainBehaviourType, orderBehaviourWithClient, fsmPeriod);
+    public CyclicMiddleMainConfig(MiddleMainBehaviourType middleMainBehaviourType, Map<MiddleFuncBehaviourtype, Object> orderBehaviourWithClient, long fsmPeriod, boolean balance) {
+        super(middleMainBehaviourType, orderBehaviourWithClient, fsmPeriod, balance);
     }
 }

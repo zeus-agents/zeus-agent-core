@@ -4,10 +4,10 @@ import java.util.List;
 
 public class LoadBalancerSelect {
 
-    public static LoadBalance selectLoadBalancer(LoadBalanceType lbt, List<String> agentList){
+    public static LoadBalance selectLoadBalancer(LoadBalanceType lbt){
         return switch (lbt){
-            case RANDOM -> RandomLoadBalancer.builder().agentList(agentList).build();
-            case ROUND_ROBIN -> RoundRobin.builder().agentList(agentList).build();
+            case RANDOM -> RandomLB.builder().build();
+            case ROUND_ROBIN -> RoundRobinLB.builder().build();
             case NO_LOAD_BALANCER -> null;
         };
     }

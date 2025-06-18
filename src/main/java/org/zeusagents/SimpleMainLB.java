@@ -8,9 +8,9 @@ import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import org.zeusagents.AIClient.TextGeneratorClient;
-import org.zeusagents.OutputClient.PrintOutputClient;
-import org.zeusagents.OutputClient.SendToAgentOutputClient;
+import org.zeusagents.aiclient.TextGeneratorClient;
+import org.zeusagents.outputclient.PrintOutputClient;
+import org.zeusagents.outputclient.SendToAgentOutputClient;
 import org.zeusagents.agents.AgentsClass;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.input.config.InputBehaviourTypes;
@@ -19,12 +19,11 @@ import org.zeusagents.agents.input.loadBalance.LoadBalanceType;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
 import org.zeusagents.agents.middle.config.SimpleMiddleMainConfig;
-import org.zeusagents.inputClient.InputACLMessageClient;
+import org.zeusagents.inputclient.InputACLMessageClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class SimpleMainLB {
@@ -44,14 +43,9 @@ public class SimpleMainLB {
             createMiddleAgent(mainContainer, "middleTestAgent1", "middle1TestAgent1");
             createMiddleAgent(mainContainer, "middleTestAgent2", "middle2TestAgent2");
 
-            LinkedList<String> loadBalancerAgentList = new LinkedList<>();
-            loadBalancerAgentList.add("middleTestAgent1");
-            loadBalancerAgentList.add("middleTestAgent2");
-
             SimpleInputConfig inputConfig = SimpleInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.SIMPLE_INPUT_BEHAVIOUR)
                     .loadBalanceType(LoadBalanceType.ROUND_ROBIN)
-                    .loadBalancerAgentList(loadBalancerAgentList)
                     .maxReceived(2)
                     .build();
 
@@ -105,6 +99,7 @@ public class SimpleMainLB {
                 .orderBehaviourWithClient(orderBehaviourWithClient)
                 .maxReceived(1)
                 .fsmPeriod(200)
+                .balance(true)
                 .build();
 
         Object[] middleObjects = new Object[1];

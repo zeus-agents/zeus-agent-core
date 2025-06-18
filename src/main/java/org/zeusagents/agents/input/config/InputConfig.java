@@ -11,16 +11,15 @@ import java.util.List;
 public abstract class InputConfig {
     protected InputBehaviourTypes inputBehaviourTypes;
     protected LoadBalanceType loadBalanceType;
-    protected List<String> loadBalancerAgentList;
+    protected boolean management = false;
 
     public InputConfig(InputBehaviourTypes inputBehaviourTypes) {
         this.inputBehaviourTypes = inputBehaviourTypes;
-        this.loadBalancerAgentList = null;
     }
 
-    public InputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, List<String> loadBalancerAgentList) {
+    public InputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, boolean management) {
         this.inputBehaviourTypes = inputBehaviourTypes;
         this.loadBalanceType = loadBalanceType;
-        this.loadBalancerAgentList = loadBalancerAgentList;
+        this.management = management;
     }
 }

@@ -5,7 +5,7 @@ import jade.core.behaviours.DataStore;
 import jade.core.behaviours.OneShotBehaviour;
 import lombok.Builder;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
-import org.zeusagents.AIClient.AIClient;
+import org.zeusagents.aiclient.AIClient;
 import org.zeusagents.agents.middle.config.DataStoreKeys;
 
 public class GeneratorMiddleBehaviour extends OneShotBehaviour {

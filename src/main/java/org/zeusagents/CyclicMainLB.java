@@ -9,9 +9,9 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
-import org.zeusagents.AIClient.TextGeneratorClient;
-import org.zeusagents.OutputClient.PrintOutputClient;
-import org.zeusagents.OutputClient.SendToAgentOutputClient;
+import org.zeusagents.aiclient.TextGeneratorClient;
+import org.zeusagents.outputclient.PrintOutputClient;
+import org.zeusagents.outputclient.SendToAgentOutputClient;
 import org.zeusagents.agents.AgentsClass;
 import org.zeusagents.agents.data.BasicMessageInputAgent;
 import org.zeusagents.agents.input.config.CyclicInputConfig;
@@ -20,12 +20,11 @@ import org.zeusagents.agents.input.loadBalance.LoadBalanceType;
 import org.zeusagents.agents.middle.config.CyclicMiddleMainConfig;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
-import org.zeusagents.inputClient.InputACLMessageClient;
+import org.zeusagents.inputclient.InputACLMessageClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class CyclicMainLB {
@@ -43,14 +42,9 @@ public class CyclicMainLB {
             createMiddleAgent(mainContainer, "middleTestAgent1", "lastTestAgent1");
             createMiddleAgent(mainContainer, "middleTestAgent2", "lastTestAgent2");
 
-            LinkedList<String> loadBalancerAgentList = new LinkedList<>();
-            loadBalancerAgentList.add("middleTestAgent1");
-            loadBalancerAgentList.add("middleTestAgent2");
-
             CyclicInputConfig inputConfig = CyclicInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR)
                     .loadBalanceType(LoadBalanceType.ROUND_ROBIN)
-                    .loadBalancerAgentList(loadBalancerAgentList)
                     .build();
 
             Object[] inputObjects = new Object[1];
@@ -109,6 +103,7 @@ public class CyclicMainLB {
                 .middleMainBehaviourType(MiddleMainBehaviourType.CYCLIC)
                 .orderBehaviourWithClient(orderBehaviourWithClient)
                 .fsmPeriod(200)
+                .balance(true)
                 .build();
 
         Object[] middleObjects = new Object[1];

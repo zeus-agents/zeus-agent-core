@@ -4,6 +4,7 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import lombok.Getter;
 import lombok.Setter;
+import org.zeusagents.agents.input.loadBalance.MiddleAgentPool;
 import org.zeusagents.agents.middle.behaviours.main.CyclicMiddleMainBehaviour;
 import org.zeusagents.agents.middle.behaviours.main.SimpleMiddleMainBehaviour;
 import org.zeusagents.agents.middle.behaviours.main.TickMiddleMainBehaviour;
@@ -33,6 +34,12 @@ public class MiddleAgent extends Agent {
                 System.out.println("[Middle OpenAPI Agent] SETUP COMPLETE");
             } else {
                 System.out.println("[Middle OpenAPI Agent] SETUP ERROR!");
+            }
+
+            if(middleMainConfig.isBalance()){
+                System.out.println("[Middle OpenAPI Agent] LocalName: " + this.getLocalName());
+                MiddleAgentPool.addAgent(this.getLocalName());
+                MiddleAgentPool.printAgentMap();
             }
         }
 

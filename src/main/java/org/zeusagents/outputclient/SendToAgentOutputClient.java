@@ -1,4 +1,4 @@
-package org.zeusagents.OutputClient;
+package org.zeusagents.outputclient;
 
 import jade.core.AID;
 import jade.core.Agent;

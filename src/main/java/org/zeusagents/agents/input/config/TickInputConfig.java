@@ -14,8 +14,8 @@ public class TickInputConfig extends InputConfig {
     private long periodSender;
 
     @Builder
-    TickInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, List<String> loadBalancerAgentList, long periodReceiver, long periodSender) {
-        super(inputBehaviourTypes, loadBalanceType, loadBalancerAgentList);
+    TickInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, boolean management, long periodReceiver, long periodSender) {
+        super(inputBehaviourTypes, loadBalanceType, management);
         this.periodReceiver=periodReceiver;
         this.periodSender=periodSender;
     }

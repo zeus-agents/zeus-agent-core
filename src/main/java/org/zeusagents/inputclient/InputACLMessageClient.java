@@ -1,4 +1,4 @@
-package org.zeusagents.inputClient;
+package org.zeusagents.inputclient;
 
 import jade.core.behaviours.DataStore;
 import jade.lang.acl.ACLMessage;
