@@ -20,8 +20,7 @@ public class SenderCore {
     public void sendMessageTickBehaviour(Behaviour behaviour){this.sendTickMessage(behaviour);}
 
     private void sendCyclicMessage(Behaviour behaviour){
-        System.out.println("[Input OpenAPI Agent] Cyclic Behavior executing. ");
-
+        System.out.println("[Input Agent] Cyclic Behavior executing. ");
         while (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
 
@@ -36,14 +35,14 @@ public class SenderCore {
                 }
 
             } else {
-                System.out.println("[Input OpenAPI Agent] No message received, blocking");
+                System.out.println("[Input Agent] No message received, blocking");
             }
         }
         myInputAgent.removeBehaviour(behaviour);
     }
 
     private int sendSimpleMessage(Behaviour behaviour, int receivedCount){
-        System.out.println("[Input OpenAPI Agent] Simple Behavior executing. ");
+        System.out.println("[Input Agent] Simple Behavior executing. ");
         if (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
 
@@ -58,7 +57,7 @@ public class SenderCore {
                 }
                 receivedCount++;
             } else {
-                System.out.println("[Input OpenAPI Agent] No message received, blocking");
+                System.out.println("[Input Agent] No message received, blocking");
             }
 
         } else {
@@ -68,7 +67,7 @@ public class SenderCore {
     }
 
     private void sendTickMessage(Behaviour behaviour){
-        //System.out.println("[Input OpenAPI Agent] Tick Behavior executing. ");
+        //System.out.println("[ Input Agent] Tick Behavior executing. ");
         if (!myInputAgent.getMessageCacheQueue().isEmpty()) {
             ACLMessage inputMsg = myInputAgent.getMessageCacheQueue().poll();
 
@@ -83,7 +82,7 @@ public class SenderCore {
                 }
 
             } else {
-                System.out.println("[Input OpenAPI Agent] No message received, blocking");
+                System.out.println("[Input Agent] No message received, blocking");
             }
 
         } else {
@@ -95,7 +94,7 @@ public class SenderCore {
         try (ObjectInputStream ois =
                      new ObjectInputStream(new ByteArrayInputStream(inputMsg.getByteSequenceContent()))) {
             BasicMessageInputAgent data = (BasicMessageInputAgent) ois.readObject();
-            System.out.println("[Input OpenAPI Agent] Received: " + data.getMiddleAgentReceiver() +
+            System.out.println("[Input Agent] Received: " + data.getMiddleAgentReceiver() +
                     " Content: " + data.getContent());
             return data.getMiddleAgentReceiver();
         } catch (Exception e) {
@@ -105,11 +104,11 @@ public class SenderCore {
     }
 
     private void redirectMessage(ACLMessage inputMsg, String receiverAgent) {
-        System.out.println("[Input OpenAPI Agent] Rework message: " + inputMsg.getOntology() + ", To: " + receiverAgent);
+        System.out.println("[Input Agent] Rework message: " + inputMsg.getOntology() + ", To: " + receiverAgent);
         inputMsg.setSender(this.myInputAgent.getAID());
         inputMsg.clearAllReceiver();
         inputMsg.addReceiver(new AID(receiverAgent, AID.ISLOCALNAME));
         this.myInputAgent.send(inputMsg);
-        System.out.println("[Input OpenAPI Agent] Send message: " + inputMsg.getOntology() + ", To: " + receiverAgent);
+        System.out.println("[Input Agent] Send message: " + inputMsg.getOntology() + ", To: " + receiverAgent);
     }
 }

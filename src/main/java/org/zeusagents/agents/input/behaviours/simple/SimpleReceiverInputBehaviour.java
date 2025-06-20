@@ -19,7 +19,7 @@ public class SimpleReceiverInputBehaviour extends SimpleBehaviour {
 
     @Override
     public void action() {
-        System.out.println("[Input OpenAPI Agent] Behavior executing");
+        System.out.println("[Input Agent] Behavior executing");
         this.receivedCount = this.receiverCore.receiveMessageSimpleBehaviour(this.receivedCount);
         block();
     }

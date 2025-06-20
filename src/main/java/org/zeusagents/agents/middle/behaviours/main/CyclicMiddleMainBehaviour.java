@@ -17,7 +17,7 @@ public class CyclicMiddleMainBehaviour extends CyclicBehaviour {
 
     @Override
     public void action() {
-        System.out.println("[Middle OpenAPI Agent " + myAgent.getName() + "] Behavior executing. Message QueueSize: " + myAgent.getCurQueueSize());
+        System.out.println("[Middle  Agent " + myAgent.getName() + "] Behavior executing. Message QueueSize: " + myAgent.getCurQueueSize());
 
         ACLMessage msg = this.myAgent.receive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
@@ -25,7 +25,7 @@ public class CyclicMiddleMainBehaviour extends CyclicBehaviour {
             MiddleAgent midAgent = (MiddleAgent) this.myAgent;
             midAgent.getMessageCacheQueue().add(msg);
         } else {
-            System.out.println("[Middle OpenAPI Agent] No message received, blocking");
+            System.out.println("[Middle  Agent] No message received, blocking");
             block();
         }
     }

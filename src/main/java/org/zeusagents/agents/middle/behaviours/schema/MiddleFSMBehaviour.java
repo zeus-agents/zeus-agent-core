@@ -44,7 +44,7 @@ public class MiddleFSMBehaviour extends TickerBehaviour {
                 this.myAgent.addBehaviour(createFSMSequence(midAgent, fsm, ds));
                 midAgent.setFSMRunning(true);
             } else {
-                System.out.println("[Middle OpenAPI Agent " + myAgent.getName() + "] No message received, blocking");
+                System.out.println("[Middle  Agent " + myAgent.getName() + "] No message received, blocking");
             }
         } else {
             block();

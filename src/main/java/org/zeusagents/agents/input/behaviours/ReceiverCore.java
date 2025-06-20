@@ -63,7 +63,7 @@ public class ReceiverCore {
 
             InputAgent myInputAgent = (InputAgent) myAgent;
             myInputAgent.getMessageCacheQueue().add(inputMsg);
-            System.out.println("[Input OpenAPI Agent] Save Ontology: "+inputMsg.getOntology()+", Agent: "+data.getMiddleAgentReceiver());
+            System.out.println("[Input Agent] Save Ontology: "+inputMsg.getOntology()+", Agent: "+data.getMiddleAgentReceiver());
 
         } catch (Exception e) {
             e.printStackTrace();

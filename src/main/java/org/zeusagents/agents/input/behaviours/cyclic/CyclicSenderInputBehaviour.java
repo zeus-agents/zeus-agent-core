@@ -19,7 +19,7 @@ public class CyclicSenderInputBehaviour extends CyclicBehaviour {
 
     @Override
     public void action() {
-        System.out.println("[Input OpenAPI Agent] Behavior executing. ");
+        System.out.println("[ Input Agent] Behavior executing. ");
         this.senderCore.sendMessageCyclicBehaviour(this);
     }
 }

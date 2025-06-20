@@ -25,7 +25,7 @@ public class TickMiddleMainBehaviour extends TickerBehaviour {
             MiddleAgent midAgent = (MiddleAgent) this.myAgent;
             midAgent.getMessageCacheQueue().add(msg);
         } else {
-            System.out.println("[Middle OpenAPI Agent] No message received, blocking");
+            System.out.println("[Middle  Agent] No message received, blocking");
             block();
         }
     }

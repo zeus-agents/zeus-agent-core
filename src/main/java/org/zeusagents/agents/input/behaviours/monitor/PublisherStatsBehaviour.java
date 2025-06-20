@@ -4,6 +4,11 @@ import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import lombok.Builder;
 import org.zeusagents.agents.input.InputAgent;
+import org.zeusagents.agents.monitor.data.MonitorData;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class PublisherStatsBehaviour extends TickerBehaviour {
 
@@ -14,9 +19,18 @@ public class PublisherStatsBehaviour extends TickerBehaviour {
 
     @Override
     protected void onTick() {
-        String dummy = "Update at " + System.currentTimeMillis();
         InputAgent inputAgent = (InputAgent) this.myAgent;
-        SubscriptionResponderBehaviour subMonitorResponder = inputAgent.getSubMonitorResponder();
-        subMonitorResponder.getPublicSubscriptionManager().notifySubscribers(dummy);
+
+        MonitorData managementContent = MonitorData.builder().queueSize(inputAgent.getMessageCacheQueue().size()).build();
+
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+            oos.writeObject(managementContent);
+            SubscriptionResponderBehaviour subMonitorResponder = inputAgent.getSubMonitorResponder();
+            subMonitorResponder.getPublicSubscriptionManager().notifySubscribers(bos.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

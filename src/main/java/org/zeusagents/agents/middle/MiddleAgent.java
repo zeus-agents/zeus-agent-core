@@ -23,7 +23,7 @@ public class MiddleAgent extends Agent {
     private boolean isFSMRunning = false;
 
     protected void setup() {
-        System.out.println("[Middle OpenAPI Agent] ReceiverAgent " + getAID().getName() + " is ready");
+        System.out.println("[Middle  Agent] ReceiverAgent " + getAID().getName() + " is ready");
 
             this.setQueueSize(10);
             final Object[] args = getArguments();
@@ -31,13 +31,13 @@ public class MiddleAgent extends Agent {
             if(null != args){
                 middleMainConfig = (MiddleMainConfig) args[0];
                 selectBehaviours();
-                System.out.println("[Middle OpenAPI Agent] SETUP COMPLETE");
+                System.out.println("[Middle  Agent] SETUP COMPLETE");
             } else {
-                System.out.println("[Middle OpenAPI Agent] SETUP ERROR!");
+                System.out.println("[Middle  Agent] SETUP ERROR!");
             }
 
             if(middleMainConfig.isBalance()){
-                System.out.println("[Middle OpenAPI Agent] LocalName: " + this.getLocalName());
+                System.out.println("[Middle  Agent] LocalName: " + this.getLocalName());
                 MiddleAgentPool.addAgent(this.getLocalName());
                 MiddleAgentPool.printAgentMap();
             }

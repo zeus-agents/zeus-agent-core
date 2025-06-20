@@ -1,8 +1,5 @@
 package org.zeusagents.agents.input.behaviours.monitor.manager;
 
-import jade.domain.FIPAAgentManagement.FailureException;
-import jade.domain.FIPAAgentManagement.NotUnderstoodException;
-import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.proto.SubscriptionResponder;
 
@@ -14,22 +11,22 @@ public class SubscriptionMonitorManager implements SubscriptionResponder.Subscri
     @Override
     public boolean register(SubscriptionResponder.Subscription s) {
         subscriptions.add(s);
-        System.out.println("Subscription received from " + s.getMessage().getSender().getLocalName());
+        System.out.println("[Input Agent] Subscription received from " + s.getMessage().getSender().getLocalName());
         return true;
     }
 
     @Override
     public boolean deregister(SubscriptionResponder.Subscription s) {
         subscriptions.remove(s);
-        System.out.println("Unsubscribed: " + s.getMessage().getSender().getLocalName());
+        System.out.println("[Input Agent] Unsubscribed: " + s.getMessage().getSender().getLocalName());
         return true;
     }
 
-    public void notifySubscribers(String updateMessage) {
+    public void notifySubscribers(byte[] updateMessage) {
         for (SubscriptionResponder.Subscription sub : subscriptions) {
             ACLMessage notification = sub.getMessage().createReply();
             notification.setPerformative(ACLMessage.INFORM);
-            notification.setContent(updateMessage);
+            notification.setByteSequenceContent(updateMessage);
             sub.notify(notification);
         }
     }

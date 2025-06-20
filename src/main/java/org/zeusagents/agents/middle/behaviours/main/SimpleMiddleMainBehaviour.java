@@ -20,7 +20,7 @@ public class SimpleMiddleMainBehaviour extends SimpleBehaviour {
 
     @Override
     public void action() {
-        System.out.println("[Middle OpenAPI Agent] Behavior executing");
+        System.out.println("[Middle  Agent] Behavior executing");
 
         // Use MatchAll to see any incoming message
         ACLMessage msg = myAgent.blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
@@ -30,7 +30,7 @@ public class SimpleMiddleMainBehaviour extends SimpleBehaviour {
             midAgent.getMessageCacheQueue().add(msg);
             this.receivedCount++;
         } else {
-            System.out.println("[Middle OpenAPI Agent] No message received, blocking");
+            System.out.println("[Middle  Agent] No message received, blocking");
             block();
         }
     }

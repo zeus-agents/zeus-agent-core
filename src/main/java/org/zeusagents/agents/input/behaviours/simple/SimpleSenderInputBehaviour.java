@@ -27,7 +27,7 @@ public class SimpleSenderInputBehaviour extends SimpleBehaviour {
     @Override
     public boolean done() {
         if (receivedCount >= maxReceived) {
-            System.out.println(myAgent.getLocalName() + " finished processing");
+            System.out.println("[Input Agent] :"+myAgent.getLocalName() + " finished processing");
             return true;
         }
         return false;

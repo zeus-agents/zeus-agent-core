@@ -28,7 +28,7 @@ public class InputAgent extends Agent {
     private SubscriptionResponderBehaviour subMonitorResponder;
 
     protected void setup() {
-        System.out.println("[Input OpenAPI Agent] ReceiverAgent " + getAID().getName() + " is ready");
+        System.out.println("[Input Agent] ReceiverAgent " + getAID().getName() + " is ready");
         final Object[] args = getArguments();
 
         if(null != args){
@@ -41,9 +41,9 @@ public class InputAgent extends Agent {
             selectBehaviour();
 
             createSubscriberResponder();
-            System.out.println("[Input OpenAPI Agent] SETUP COMPLETE");
+            System.out.println("[Input Agent] SETUP COMPLETE");
         } else{
-            System.out.println("[Input OpenAPI Agent] SETUP ERROR!");
+            System.out.println("[Input Agent] SETUP ERROR!");
         }
     }
 
@@ -68,12 +68,15 @@ public class InputAgent extends Agent {
     }
 
     private void createSubscriberResponder(){
+        System.out.println("[Input Agent] SETUP MONITORING");
+
         MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE);
         SubscriptionMonitorManager subscriptionMonitorManager = new SubscriptionMonitorManager();
 
         subMonitorResponder = new SubscriptionResponderBehaviour(this, mt, subscriptionMonitorManager);
 
         addBehaviour(subMonitorResponder);
-        addBehaviour(PublisherStatsBehaviour.builder().a(this).period(5000).build());
+        addBehaviour(PublisherStatsBehaviour.builder().a(this).period(100).build());
+
     }
 }
