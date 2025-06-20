@@ -39,12 +39,19 @@ public class CyclicMainManager {
         AgentContainer mainContainer = rt.createMainContainer(profile);
 
         try {
+
+            /*
+                MIDDLE AGENTS
+            */
             createMiddleLastAgent(mainContainer, "lastTestAgent1");
             createMiddleLastAgent(mainContainer, "lastTestAgent2");
 
             createMiddleAgent(mainContainer, "middleTestAgent1", "lastTestAgent1");
             createMiddleAgent(mainContainer, "middleTestAgent2", "lastTestAgent2");
 
+            /*
+                INPUT AGENTS
+            */
             CyclicInputConfig inputConfig = CyclicInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR)
                     .loadBalanceType(LoadBalanceType.NO_LOAD_BALANCER)
@@ -59,6 +66,9 @@ public class CyclicMainManager {
                     AgentsClass.INPUT_AGENT, inputObjects);
             inputAgent.start();
 
+            /*
+                MONITOR AGENTS
+            */
             List<AgentController> inputAgentsList = List.of(inputAgent);
             MonitorConfig monitorConfig = MonitorConfig.builder().inputAgentList(inputAgentsList).build();
 

@@ -4,6 +4,7 @@ import jade.wrapper.AgentController;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.zeusagents.agents.middle.config.MiddleMainConfig;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ import java.util.List;
 @Builder
 public class MonitorConfig {
     private List<AgentController> inputAgentList;
+    private boolean autoScaling = false;
+    private List<MiddleMainConfig> middleMainConfig;
 }
