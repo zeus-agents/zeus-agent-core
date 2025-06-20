@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.zeusagents.agents.input.loadBalance.LoadBalanceType;
+import org.zeusagents.agents.monitor.data.StatsToMonitor;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class CyclicInputConfig extends InputConfig {
 
     @Builder
-    CyclicInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, boolean management) {
-        super(inputBehaviourTypes, loadBalanceType, management);
+    CyclicInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, boolean management, List<StatsToMonitor> statsToMonitor) {
+        super(inputBehaviourTypes, loadBalanceType, management, statsToMonitor);
     }
 }

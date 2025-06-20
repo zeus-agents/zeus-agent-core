@@ -40,7 +40,9 @@ public class InputAgent extends Agent {
 
             selectBehaviour();
 
-            createSubscriberResponder();
+            if(inputConfig.isManagement()){
+                createSubscriberResponder();
+            }
             System.out.println("[Input Agent] SETUP COMPLETE");
         } else{
             System.out.println("[Input Agent] SETUP ERROR!");

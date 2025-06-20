@@ -18,6 +18,7 @@ import org.zeusagents.agents.monitor.config.MonitorConfig;
 import org.zeusagents.agents.middle.config.CyclicMiddleMainConfig;
 import org.zeusagents.agents.middle.config.MiddleFuncBehaviourtype;
 import org.zeusagents.agents.middle.config.MiddleMainBehaviourType;
+import org.zeusagents.agents.monitor.data.StatsToMonitor;
 import org.zeusagents.aiclient.TextGeneratorClient;
 import org.zeusagents.inputclient.InputACLMessageClient;
 import org.zeusagents.outputclient.PrintOutputClient;
@@ -47,6 +48,8 @@ public class CyclicMainManager {
             CyclicInputConfig inputConfig = CyclicInputConfig.builder()
                     .inputBehaviourTypes(InputBehaviourTypes.CYCLIC_INPUT_BEHAVIOUR)
                     .loadBalanceType(LoadBalanceType.NO_LOAD_BALANCER)
+                    .management(true)
+                    .statsToMonitor(List.of(StatsToMonitor.MEMORY_USED))
                     .build();
 
             Object[] inputObjects = new Object[1];

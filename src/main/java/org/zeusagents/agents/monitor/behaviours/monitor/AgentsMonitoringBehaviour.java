@@ -19,10 +19,17 @@ public class AgentsMonitoringBehaviour extends SubscriptionInitiator {
     @Override
     protected void handleInform(ACLMessage inform) {
         MonitorData monitorData = deserializeMessage(inform);
-        System.out.println("[Manager Agent] INFORMED: "+ monitorData.getQueueSize());
+        System.out.println("[Manager Agent] INFORMED Queue: "+ monitorData.getQueueSize());
+        System.out.println("[Manager Agent] INFORMED Memory: "+ monitorData.getMemoryUsed());
 
         if(monitorData.getQueueSize() >= 1){
-            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": We have to create more agents" );
+            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": We have to create more agents by Queue size" );
+        } else {
+            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": GOOD STATUS!" );
+        }
+
+        if(monitorData.getMemoryUsed() >= 80){
+            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": We have to create more agents by memory" );
         } else {
             System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": GOOD STATUS!" );
         }

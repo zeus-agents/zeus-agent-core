@@ -9,4 +9,5 @@ import java.io.Serializable;
 @Builder
 public class MonitorData implements Serializable {
     private int queueSize;
+    private long memoryUsed;
 }

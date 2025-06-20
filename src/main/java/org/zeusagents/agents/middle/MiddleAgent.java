@@ -31,13 +31,13 @@ public class MiddleAgent extends Agent {
             if(null != args){
                 middleMainConfig = (MiddleMainConfig) args[0];
                 selectBehaviours();
-                System.out.println("[Middle  Agent] SETUP COMPLETE");
+                System.out.println("[Middle Agent] SETUP COMPLETE");
             } else {
-                System.out.println("[Middle  Agent] SETUP ERROR!");
+                System.out.println("[Middle Agent] SETUP ERROR!");
             }
 
             if(middleMainConfig.isBalance()){
-                System.out.println("[Middle  Agent] LocalName: " + this.getLocalName());
+                System.out.println("[Middle Agent] LocalName: " + this.getLocalName());
                 MiddleAgentPool.addAgent(this.getLocalName());
                 MiddleAgentPool.printAgentMap();
             }
