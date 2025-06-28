@@ -1,5 +1,5 @@
 package org.zeusagents.agents.monitor.data;
 
 public enum StatsToMonitor {
-    QUEUE_SIZE, MEMORY_USED
+    CACHE_QUEUE_SIZE, QUEUE_SIZE, MEMORY_USED
 }

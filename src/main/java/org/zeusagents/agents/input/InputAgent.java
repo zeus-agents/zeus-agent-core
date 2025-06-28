@@ -34,7 +34,7 @@ public class InputAgent extends Agent {
         if(null != args){
             inputConfig = (InputConfig) args[0];
             //This accept data external from the JDE system
-            setEnabledO2ACommunication(true, 10);
+            setEnabledO2ACommunication(this.inputConfig.isEnabledO2A(), 10);
 
             this.loadBalance = LoadBalancerSelect.selectLoadBalancer(this.inputConfig.getLoadBalanceType());
 

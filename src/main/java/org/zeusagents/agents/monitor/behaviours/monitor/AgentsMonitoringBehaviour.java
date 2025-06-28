@@ -23,13 +23,19 @@ public class AgentsMonitoringBehaviour extends SubscriptionInitiator {
         System.out.println("[Manager Agent] INFORMED Memory: "+ monitorData.getMemoryUsed());
 
         if(monitorData.getQueueSize() >= 1){
-            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": We have to create new agentflow by Queue size" );
+            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": We have to create new inputAgent with agentflow");
+        } else {
+            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": GOOD STATUS!" );
+        }
+
+        if(monitorData.getCacheQueueSize() >= 1){
+            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": We have to create new agentflow by Queue size");
         } else {
             System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": GOOD STATUS!" );
         }
 
         if(monitorData.getMemoryUsed() >= 80){
-            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": We have to create more agents by memory in new container" );
+            System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": We have to create more agents by memory in new container");
         } else {
             System.out.println("[Manager Agent] " + this.myAgent.getLocalName() + ": GOOD STATUS!" );
         }

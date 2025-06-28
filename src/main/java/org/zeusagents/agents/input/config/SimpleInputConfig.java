@@ -14,8 +14,8 @@ public class SimpleInputConfig extends InputConfig {
     private int maxReceived;
 
     @Builder
-    SimpleInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, boolean management, List<StatsToMonitor> statsToMonitor, int maxReceived) {
-        super(inputBehaviourTypes, loadBalanceType, management, statsToMonitor);
+    SimpleInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, boolean management, boolean enabledO2A, List<StatsToMonitor> statsToMonitor, int maxReceived) {
+        super(inputBehaviourTypes, loadBalanceType, management, enabledO2A, statsToMonitor);
         this.maxReceived=maxReceived;
     }
 }

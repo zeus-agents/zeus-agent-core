@@ -29,6 +29,7 @@ public class PublisherStatsBehaviour extends TickerBehaviour {
 
         for ( StatsToMonitor stats: statsToMonitor){
             switch (stats){
+                case CACHE_QUEUE_SIZE -> this.cacheQueueSize(builder,inputAgent);
                 case QUEUE_SIZE -> this.queueSize(builder,inputAgent);
                 case MEMORY_USED -> this.memoryUsed(builder);
             };
@@ -48,8 +49,12 @@ public class PublisherStatsBehaviour extends TickerBehaviour {
         }
     }
 
+    public void cacheQueueSize(MonitorData.MonitorDataBuilder builder, InputAgent inputAgent){
+        builder.cacheQueueSize(inputAgent.getMessageCacheQueue().size());
+    }
+
     public void queueSize(MonitorData.MonitorDataBuilder builder, InputAgent inputAgent){
-        builder.queueSize(inputAgent.getMessageCacheQueue().size());
+        builder.queueSize(inputAgent.getQueueSize());
     }
 
     public void memoryUsed(MonitorData.MonitorDataBuilder builder){

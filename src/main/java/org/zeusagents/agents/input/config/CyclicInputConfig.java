@@ -13,7 +13,7 @@ import java.util.List;
 public class CyclicInputConfig extends InputConfig {
 
     @Builder
-    CyclicInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, boolean management, List<StatsToMonitor> statsToMonitor) {
-        super(inputBehaviourTypes, loadBalanceType, management, statsToMonitor);
+    CyclicInputConfig(InputBehaviourTypes inputBehaviourTypes, LoadBalanceType loadBalanceType, boolean management, boolean enabledO2A, List<StatsToMonitor> statsToMonitor) {
+        super(inputBehaviourTypes, loadBalanceType, management, enabledO2A, statsToMonitor);
     }
 }
